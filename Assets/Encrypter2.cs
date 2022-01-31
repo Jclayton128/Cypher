@@ -73,8 +73,8 @@ public class Encrypter2 : MonoBehaviour
             for (int i = 0; i < plainText.Length; i++)
             {
                 suppressions[j, i] = ReturnWeightedBoolean(j, targetValue_Suppression);
-                encryptions[j, i] = ReturnWeightedInt(j, targetValue_Suppression);
-                scrambles[j,i] = UnityEngine.Random.Range(-2, 3);
+                encryptions[j, i] = ReturnWeightedInt(j, targetValue_Encryption);
+                scrambles[j, i] = ReturnWeightedInt(j, targetValue_Scramble);
             }
         }
         //for (int k = 0; k < plainText.Length; k++)
@@ -109,7 +109,7 @@ public class Encrypter2 : MonoBehaviour
         }
         else
         {
-            int rand2 = UnityEngine.Random.Range(-maxEncryptionShift, maxEncryptionShift + 1);
+            int rand2 = UnityEngine.Random.Range(1, maxEncryptionShift + 1);
             return rand2;
         }
 
@@ -121,14 +121,27 @@ public class Encrypter2 : MonoBehaviour
         char[] cypherChars = new char[plainText.Length];
 
         cypherChars = ApplyEncryption(cypherChars, sliderEncryption.value);
-        cypherChars = ApplySuppression(cypherChars, sliderSuppression.value);
         cypherChars = ApplyScrambling(cypherChars, sliderScramble.value);
+        cypherChars = ApplySuppression(cypherChars, sliderSuppression.value);
 
         cypherText = AssembleCypherText(cypherChars);
         displayTextTMP.text = cypherText;
     }
 
     #region Helpers
+
+    private char[] ApplyEncryption(char[] inputChars, float value)
+    {
+        char[] plainChars = plainText.ToCharArray();
+        char[] cypherChars = inputChars;
+        for (int i = 0; i < inputChars.Length; i++)
+        {
+            cypherChars[i] = Convert.ToChar(plainChars[i] + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
+            // Add in a "clamp" that keeps the new characters as something legible.
+        }
+
+        return cypherChars;
+    }
 
     private char[] ApplySuppression(char[] inputChars, float value)
     {
@@ -162,21 +175,37 @@ public class Encrypter2 : MonoBehaviour
         return newCypherChars;
     }
 
-    private char[] ApplyEncryption(char[] inputChars, float value)
-    {
-        char[] plainChars = plainText.ToCharArray();
-        char[] cypherChars = inputChars;
-        for (int i = 0; i < inputChars.Length; i++)
-        {
-            cypherChars[i] = Convert.ToChar(plainChars[i] + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
-        }
-
-        return cypherChars;
-    }
-
     private char[] ApplyScrambling(char[] inputChars, float value)
     {
-        return inputChars;
+        char[] newCypherChars = inputChars;
+        for (int i = 0; i < inputChars.Length; i++)
+        {
+            int movement = scrambles[Mathf.RoundToInt(sliderScramble.value), i];
+            if ( movement == 0)
+            {
+                //do no scrambling 
+            }
+            else
+            {
+                char charCurrentlyInNewSpot;
+                char charInCurrentSpot = newCypherChars[i];
+                Debug.Log($"at index{i} of {inputChars.Length - 1}. Movement is {movement}");
+                if (i+movement >= inputChars.Length)
+                {
+                    charCurrentlyInNewSpot = newCypherChars[i - movement];
+                    newCypherChars[i] = charCurrentlyInNewSpot;
+                    newCypherChars[i - movement] = charInCurrentSpot;
+                }
+                else
+                {                    
+                    charCurrentlyInNewSpot = newCypherChars[i + movement];
+                    newCypherChars[i] = charCurrentlyInNewSpot;
+                    newCypherChars[i + movement] = charInCurrentSpot;
+                }             
+
+            }
+        }
+        return newCypherChars;
     }
 
     private string AssembleCypherText(char[] cypherChars)
