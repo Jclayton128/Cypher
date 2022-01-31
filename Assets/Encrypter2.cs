@@ -7,6 +7,8 @@ using System;
 
 public class Encrypter2 : MonoBehaviour
 {
+    FileManager fm;
+
     [SerializeField] TextMeshProUGUI displayTextTMP = null;
 
     [SerializeField] Slider sliderSuppression = null;
@@ -16,7 +18,7 @@ public class Encrypter2 : MonoBehaviour
     char space = ' ';
     
     //settings
-    int maxSettings = 20;
+    public int MaxSettings { get; private set; } = 20;
     int maxEncryptionShift = 2;
 
     //state
@@ -32,11 +34,24 @@ public class Encrypter2 : MonoBehaviour
     #region Preparation
     private void Start()
     {
-        plainText = displayTextTMP.text;
         SetupSliders();
         CreateLetterPool();
+
+        fm = FindObjectOfType<FileManager>();
+        InitializeNewFile(fm.GetRandomFile());
+    }
+    
+    public void InitializeNewFile(FilePack file)
+    {
+        plainText = file.FilePlaintext;
+        targetValue_Suppression = file.TargetValues[0];
+        targetValue_Encryption = file.TargetValues[1];
+        targetValue_Scramble = file.TargetValues[2];
+
         InitializeParameterizedSettings();
         GenerateParameterizedSettings();
+
+        Encrypt();
     }
 
     private void CreateLetterPool()
@@ -51,24 +66,24 @@ public class Encrypter2 : MonoBehaviour
     private void SetupSliders()
     {
         sliderSuppression.minValue = 0;
-        sliderSuppression.maxValue = maxSettings - 1;
+        sliderSuppression.maxValue = MaxSettings - 1;
         sliderEncryption.minValue = 0;
-        sliderEncryption.maxValue = maxSettings - 1;
+        sliderEncryption.maxValue = MaxSettings - 1;
         sliderScramble.minValue = 0;
-        sliderScramble.maxValue = maxSettings - 1;
+        sliderScramble.maxValue = MaxSettings - 1;
     }
 
     private void InitializeParameterizedSettings()
     {
         int length = plainText.Length;
-        suppressions = new bool[maxSettings,length];
-        encryptions = new int[maxSettings, length];
-        scrambles = new int[maxSettings, length];
+        suppressions = new bool[MaxSettings,length];
+        encryptions = new int[MaxSettings, length];
+        scrambles = new int[MaxSettings, length];
     }
 
     private void GenerateParameterizedSettings()
     {
-        for (int j = 0; j < maxSettings; j++)
+        for (int j = 0; j < MaxSettings; j++)
         {
             for (int i = 0; i < plainText.Length; i++)
             {
@@ -88,8 +103,8 @@ public class Encrypter2 : MonoBehaviour
     private bool ReturnWeightedBoolean(float currentValue, float targetValue)
     {
         int diff = Mathf.RoundToInt(Mathf.Abs(targetValue - currentValue));
-        int rand = UnityEngine.Random.Range(0, 12);
-        if (rand > diff)
+        int rand = UnityEngine.Random.Range(0, 11);
+        if (rand >= diff)
         {
             return true;
         }
@@ -102,8 +117,8 @@ public class Encrypter2 : MonoBehaviour
     private int ReturnWeightedInt(float currentValue, float targetValue)
     {
         int diff = Mathf.RoundToInt(Mathf.Abs(targetValue - currentValue));
-        int rand = UnityEngine.Random.Range(0, 12);
-        if (rand > diff)
+        int rand = UnityEngine.Random.Range(0, 11);
+        if (rand >= diff)
         {
             return 0;
         }
@@ -126,6 +141,16 @@ public class Encrypter2 : MonoBehaviour
 
         cypherText = AssembleCypherText(cypherChars);
         displayTextTMP.text = cypherText;
+    }
+
+    public void MoveToNextFile()
+    {
+        InitializeNewFile(fm.GetNextFile());
+    }
+
+    public void MoveBackOneFile()
+    {
+        InitializeNewFile(fm.GetPreviousFile());
     }
 
     #region Helpers
@@ -189,7 +214,7 @@ public class Encrypter2 : MonoBehaviour
             {
                 char charCurrentlyInNewSpot;
                 char charInCurrentSpot = newCypherChars[i];
-                Debug.Log($"at index{i} of {inputChars.Length - 1}. Movement is {movement}");
+                //Debug.Log($"at index{i} of {inputChars.Length - 1}. Movement is {movement}");
                 if (i+movement >= inputChars.Length)
                 {
                     charCurrentlyInNewSpot = newCypherChars[i - movement];
