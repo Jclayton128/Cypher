@@ -139,9 +139,12 @@ public class Encrypter2 : MonoBehaviour
         cypherChars = ApplyScrambling(cypherChars, sliderScramble.value);
         cypherChars = ApplySuppression(cypherChars, sliderSuppression.value);
 
+        cypherChars = Despace(cypherChars);
         cypherText = AssembleCypherText(cypherChars);
+
         displayTextTMP.text = cypherText;
     }
+
 
     public void MoveToNextFile()
     {
@@ -247,6 +250,18 @@ public class Encrypter2 : MonoBehaviour
     {
         int rand = UnityEngine.Random.Range(0, letterPool.Length);
         return letterPool[rand];
+    }
+
+    private char[] Despace(char[] cypherChars)
+    {
+        for(int i = 0; i < cypherChars.Length; i++)
+        {
+            if (Char.IsWhiteSpace(cypherChars[i]))
+            {
+                cypherChars[i] = space;
+            }
+        }
+        return cypherChars;
     }
     #endregion
 }

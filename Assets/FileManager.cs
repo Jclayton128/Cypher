@@ -8,6 +8,10 @@ public class FileManager : MonoBehaviour
     Encrypter2 ce;
     [SerializeField] string[] fileSource = null;
 
+    //settings
+    int maxStringLength = 46;
+    char underscore = ' ';
+
     //state
     int currentFile;
     List<int[]> targetValues;
@@ -15,7 +19,25 @@ public class FileManager : MonoBehaviour
     private void Start()
     {
         ce = FindObjectOfType<Encrypter2>();
+        PrepareFiles();
         GenerateTargetValues();
+
+    }
+
+    private void PrepareFiles()
+    {
+        for (int i = 0; i < fileSource.Length; i++)
+        {
+            if (fileSource[i].Length > maxStringLength)
+            {
+                fileSource[i].Remove(maxStringLength - 1);
+            }
+
+            while (fileSource[i].Length < maxStringLength)
+            {
+                fileSource[i] += underscore;
+            }                
+        }
     }
 
     private void GenerateTargetValues()
