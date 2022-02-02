@@ -15,7 +15,7 @@ public class Encrypter2 : MonoBehaviour
     [SerializeField] Slider sliderEncryption = null;
     [SerializeField] Slider sliderScramble = null;
     [SerializeField] char[] letterPool;
-    char space = ' ';
+    char space = '_';
     
     //settings
     public int MaxSettings { get; private set; } = 20;
@@ -56,10 +56,14 @@ public class Encrypter2 : MonoBehaviour
 
     private void CreateLetterPool()
     {
-        letterPool = new char[26];
+        letterPool = new char[30];
         for (int i = 0; i < 26; i++)
         {
             letterPool[i] = Convert.ToChar('a' + i);
+        }
+        for (int i = 26; i < letterPool.Length; i++)
+        {
+            letterPool[i] = space;
         }
     }
 
@@ -133,7 +137,7 @@ public class Encrypter2 : MonoBehaviour
     #endregion
     public void Encrypt()
     {
-        char[] cypherChars = new char[plainText.Length];
+        char[] cypherChars = plainText.ToCharArray();
 
         cypherChars = ApplyEncryption(cypherChars, sliderEncryption.value);
         cypherChars = ApplyScrambling(cypherChars, sliderScramble.value);
@@ -160,12 +164,25 @@ public class Encrypter2 : MonoBehaviour
 
     private char[] ApplyEncryption(char[] inputChars, float value)
     {
-        char[] plainChars = plainText.ToCharArray();
         char[] cypherChars = inputChars;
         for (int i = 0; i < inputChars.Length; i++)
         {
-            cypherChars[i] = Convert.ToChar(plainChars[i] + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
-            // Add in a "clamp" that keeps the new characters as something legible.
+            if (Char.IsLetter(cypherChars[i]))
+            {
+                cypherChars[i] = Convert.ToChar(inputChars[i] + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
+                // Add in a "clamp" that keeps the new characters as something legible.
+            }
+            else
+            {
+                if (encryptions[Mathf.RoundToInt(sliderEncryption.value), i] == 0)
+                {
+                    cypherChars[i] = inputChars[i];
+                }
+                else
+                {
+                    cypherChars[i] = Convert.ToChar(GetRandomChar() + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
+                }                
+            }
         }
 
         return cypherChars;
