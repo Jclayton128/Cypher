@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FileManager : MonoBehaviour
 {
+    InterfaceManager im;
     CipherEngine ce;
     [SerializeField] string[] fileSource = null;
     [SerializeField] Sprite[] spriteSource = null;
@@ -21,6 +22,7 @@ public class FileManager : MonoBehaviour
 
     private void Start()
     {
+        im = FindObjectOfType<InterfaceManager>();
         ce = FindObjectOfType<CipherEngine>();
         PrepareFiles();
         targetValues_files = GenerateTargetValues(fileSource);
@@ -52,7 +54,7 @@ public class FileManager : MonoBehaviour
             int[] values = new int[3];
             for (int j = 0; j < values.Length; j++)
             {
-                values[j] = UnityEngine.Random.Range(0, ce.MaxSettings);
+                values[j] = UnityEngine.Random.Range(0, im.MaxSettings);
             }
             targetValues_files.Add(values);
         }

@@ -8,7 +8,8 @@ TagManager:
   - Slider1
   - Slider2
   - ScreenText
-  - ScreenSprite
+  - Screen
+  - BackgroundScreen
   layers:
   - Default
   - TransparentFX
