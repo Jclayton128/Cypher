@@ -7,7 +7,8 @@ using System;
 
 public class CipherEngine : MonoBehaviour
 {
-    protected TextMeshProUGUI displayTextTMP = null;
+    protected TextMeshProUGUI displayTextTMP;
+    protected RawImage displayImage;
     protected Slider slider0 ;
     protected Slider slider1;
     protected Slider slider2;
@@ -20,10 +21,11 @@ public class CipherEngine : MonoBehaviour
         FindComponents();
         SetupSliders();
     }
-
+    
     private void FindComponents()
     {
         displayTextTMP = GameObject.FindGameObjectWithTag("ScreenText").GetComponent<TextMeshProUGUI>();
+        displayImage = GameObject.FindGameObjectWithTag("Screen").GetComponent<RawImage>();
         slider0 = GameObject.FindGameObjectWithTag("Slider0").GetComponent<Slider>();
         slider1 = GameObject.FindGameObjectWithTag("Slider1").GetComponent<Slider>();
         slider2 = GameObject.FindGameObjectWithTag("Slider2").GetComponent<Slider>();
