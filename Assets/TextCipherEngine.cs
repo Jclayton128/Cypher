@@ -5,20 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class Encrypter2 : MonoBehaviour
+public class TextCipherEngine : CipherEngine
 {
     FileManager fm;
 
-    [SerializeField] TextMeshProUGUI displayTextTMP = null;
 
-    [SerializeField] Slider sliderSuppression = null;
-    [SerializeField] Slider sliderEncryption = null;
-    [SerializeField] Slider sliderScramble = null;
+
     [SerializeField] char[] letterPool;
     char space = '_';
     
     //settings
-    public int MaxSettings { get; private set; } = 20;
     int maxEncryptionShift = 2;
 
     //state
@@ -32,12 +28,11 @@ public class Encrypter2 : MonoBehaviour
     [SerializeField] int[,] scrambles;
 
     #region Preparation
-    private void Start()
+    protected override void Start()
     {
-        SetupSliders();
-        CreateLetterPool();
-
+        base.Start();
         fm = FindObjectOfType<FileManager>();
+        CreateLetterPool();
         InitializeNewFile(fm.GetRandomFile());
     }
     
@@ -67,15 +62,6 @@ public class Encrypter2 : MonoBehaviour
         }
     }
 
-    private void SetupSliders()
-    {
-        sliderSuppression.minValue = 0;
-        sliderSuppression.maxValue = MaxSettings - 1;
-        sliderEncryption.minValue = 0;
-        sliderEncryption.maxValue = MaxSettings - 1;
-        sliderScramble.minValue = 0;
-        sliderScramble.maxValue = MaxSettings - 1;
-    }
 
     private void InitializeParameterizedSettings()
     {
@@ -139,9 +125,9 @@ public class Encrypter2 : MonoBehaviour
     {
         char[] cypherChars = plainText.ToCharArray();
 
-        cypherChars = ApplyEncryption(cypherChars, sliderEncryption.value);
-        cypherChars = ApplyScrambling(cypherChars, sliderScramble.value);
-        cypherChars = ApplySuppression(cypherChars, sliderSuppression.value);
+        cypherChars = ApplyEncryption(cypherChars, slider1.value);
+        cypherChars = ApplyScrambling(cypherChars, slider2.value);
+        cypherChars = ApplySuppression(cypherChars, slider0.value);
 
         cypherChars = Despace(cypherChars);
         cypherText = AssembleCypherText(cypherChars);
@@ -169,18 +155,18 @@ public class Encrypter2 : MonoBehaviour
         {
             if (Char.IsLetter(cypherChars[i]))
             {
-                cypherChars[i] = Convert.ToChar(inputChars[i] + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
+                cypherChars[i] = Convert.ToChar(inputChars[i] + encryptions[Mathf.RoundToInt(slider1.value), i]);
                 // Add in a "clamp" that keeps the new characters as something legible.
             }
             else
             {
-                if (encryptions[Mathf.RoundToInt(sliderEncryption.value), i] == 0)
+                if (encryptions[Mathf.RoundToInt(slider1.value), i] == 0)
                 {
                     cypherChars[i] = inputChars[i];
                 }
                 else
                 {
-                    cypherChars[i] = Convert.ToChar(GetRandomChar() + encryptions[Mathf.RoundToInt(sliderEncryption.value), i]);
+                    cypherChars[i] = Convert.ToChar(GetRandomChar() + encryptions[Mathf.RoundToInt(slider1.value), i]);
                 }                
             }
         }
@@ -194,7 +180,7 @@ public class Encrypter2 : MonoBehaviour
         char[] newCypherChars = inputChars;
         for (int i = 0; i < inputChars.Length; i++)
         {
-            if (suppressions[Mathf.RoundToInt(sliderSuppression.value), i] == false)  //
+            if (suppressions[Mathf.RoundToInt(slider0.value), i] == false)  //
             {
                 if (Char.IsLetter(inputChars[i]) == true)
                 {
@@ -225,7 +211,7 @@ public class Encrypter2 : MonoBehaviour
         char[] newCypherChars = inputChars;
         for (int i = 0; i < inputChars.Length; i++)
         {
-            int movement = scrambles[Mathf.RoundToInt(sliderScramble.value), i];
+            int movement = scrambles[Mathf.RoundToInt(slider2.value), i];
             if ( movement == 0)
             {
                 //do no scrambling 

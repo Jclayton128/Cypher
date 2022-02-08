@@ -1933,7 +1933,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1111018149}
-  - component: {fileID: 1111018148}
   - component: {fileID: 1111018150}
   m_Layer: 0
   m_Name: CipherEngine
@@ -1942,26 +1941,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1111018148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1111018147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b507802092a3974ab4357dab8bdb700, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textTMP: {fileID: 691602077}
-  encryptions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &1111018149
 Transform:
   m_ObjectHideFlags: 0
@@ -1988,10 +1967,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1332a03d3d2b93478203144c0b47383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayTextTMP: {fileID: 691602077}
-  sliderSuppression: {fileID: 267173489}
-  sliderEncryption: {fileID: 379110193}
-  sliderScramble: {fileID: 969236247}
   letterPool: 
 --- !u!1 &1123363487
 GameObject:
@@ -2100,6 +2075,8 @@ MonoBehaviour:
   - There is money in the banana stand
   - The launch code is "rosebud"
   - My voice is my password
+  spriteSource:
+  - {fileID: 21300000, guid: 2bedc0c613d9b1049a1bf0b081c250f4, type: 3}
 --- !u!4 &1227060410
 Transform:
   m_ObjectHideFlags: 0
