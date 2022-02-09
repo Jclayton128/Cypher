@@ -10,6 +10,7 @@ TagManager:
   - ScreenText
   - Screen
   - BackgroundScreen
+  - ToggleMode
   layers:
   - Default
   - TransparentFX

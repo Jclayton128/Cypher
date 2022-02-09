@@ -30,42 +30,11 @@ public class ImageCipherEngine : CipherEngine
         //ConvertArrayPlainToDisplaySprite();
         screenMaterial = im.GetScreenMaterial();
         screenImage = im.GetScreenImage();
-        Obfuscate();
     }
 
-    private void InitializeDisplayTexture()
-    {
-
-        width = Mathf.RoundToInt(im.imageScreen.GetComponent<RectTransform>().rect.width);
-        height = Mathf.RoundToInt(im.imageScreen.GetComponent<RectTransform>().rect.height);
-        screenRect = im.imageScreen.GetComponent<RectTransform>().rect;
-        textureDisplay = new Texture2D(width, height);
-        //Debug.Log($"rect: {screenRect}");
-        //Debug.Log($"height: {height}, width: {width}");
-        //textureDisplay.height = height;
-    }
-
-    private void PreparePlainTexture()
-    {
-        arrayPlain = spriteSource.texture.GetPixels(0, 0, width, height);
-        //Debug.Log($"{arrayPlain[0]}, {arrayPlain[10]}, {arrayPlain[60]}. length: {arrayPlain.Length}");
-    }
-
+    
     private void HandleSlider0()
     {
-        //if (im.SliderValue_0 > 5)
-        //{
-        //    for (int i = 0; i < arrayPlain.Length; i++)
-        //    {
-        //        arrayPlain[i] = Color.black;
-        //    }
-        //}
-        //else
-        //{
-        //    PreparePlainTexture();
-        //}
-
-        //ConvertArrayPlainToDisplaySprite();
         float val = Mathf.Abs(Mathf.Clamp((im.SliderValue_0 - targetVal_0),-2,im.MaxSettings)/ (float)im.MaxSettings);
         float val2 = Mathf.Abs(Mathf.Clamp((im.SliderValue_0 - targetVal_0), -im.MaxSettings, 1) / (float)im.MaxSettings);
         screenImage.materialForRendering.SetFloat("_FadeAmount", val);
@@ -106,20 +75,29 @@ public class ImageCipherEngine : CipherEngine
         screenImage.materialForRendering.SetFloat("_FishEyeUvAmount", fisheye);
 
     }
-    private void ConvertArrayPlainToDisplaySprite()
-    {
-        textureDisplay.SetPixels(0, 0, width, height, arrayPlain);
-        textureDisplay.Apply();
-        //Rect newRect = new Rect(new Vector2(-50, -50), new Vector2(240, 240));
-        //Sprite display = Sprite.Create(textureDisplay, newRect, Vector2.zero);
-;       //im.UpdateDisplay(textureDisplay);
-    }
-
 
     public override void Obfuscate()
     {
+        if (!isReadyToObfuscate)
+        {
+            Debug.Log("Not ready to obfuscate");
+            return;
+        }
         HandleSlider0();
         HandleSlider1();
         HandleSlider2();
+    }
+
+    public override void InitializeNewFile(System.Object newObject)
+    {
+        SpritePack spritePack = (SpritePack)newObject;
+        im.UpdateDisplay(spritePack.SpritePlain);
+        targetVal_0 = spritePack.TargetValues[0];
+        targetVal_1 = spritePack.TargetValues[1];;
+        targetVal_2 = spritePack.TargetValues[2];
+
+        isReadyToObfuscate = true;
+
+        Obfuscate();
     }
 }

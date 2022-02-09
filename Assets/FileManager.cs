@@ -6,8 +6,9 @@ using UnityEngine;
 public class FileManager : MonoBehaviour
 {
     InterfaceManager im;
-    CipherEngine ce;
-    [SerializeField] string[] fileSource = null;
+    TextCipherEngine textCE;
+    ImageCipherEngine imageCE;
+    [SerializeField] string[] textSource = null;
     [SerializeField] Sprite[] spriteSource = null;
 
     //settings
@@ -15,40 +16,44 @@ public class FileManager : MonoBehaviour
     char underscore = '_';
 
     //state
-    int currentFile;
-    int currentSprite;
-    List<int[]> targetValues_files;
+    public int currentText;
+    public int currentSprite;
+    List<int[]> targetValues_text;
     List<int[]> targetValues_sprites;
 
     private void Start()
     {
         im = FindObjectOfType<InterfaceManager>();
-        ce = FindObjectOfType<CipherEngine>();
-        PrepareFiles();
-        targetValues_files = GenerateTargetValues(fileSource);
+        im.OnModeChanged += HandleModeChange;
+        textCE = FindObjectOfType<TextCipherEngine>();
+        imageCE = FindObjectOfType<ImageCipherEngine>();
+        PrepareTextFiles();
+        targetValues_text = GenerateTargetValues(textSource);
         targetValues_sprites = GenerateTargetValues(spriteSource);
 
+        SetInitialText();
+        SetInitialSprite();
     }
 
-    private void PrepareFiles()
+    private void PrepareTextFiles()
     {
-        for (int i = 0; i < fileSource.Length; i++)
+        for (int i = 0; i < textSource.Length; i++)
         {
-            if (fileSource[i].Length > maxStringLength)
+            if (textSource[i].Length > maxStringLength)
             {
-                fileSource[i].Remove(maxStringLength - 1);
+                textSource[i].Remove(maxStringLength - 1);
             }
 
-            while (fileSource[i].Length < maxStringLength)
+            while (textSource[i].Length < maxStringLength)
             {
-                fileSource[i] += underscore;
+                textSource[i] += underscore;
             }                
         }
     }
 
     private List<int[]> GenerateTargetValues(Array array)
     {
-        targetValues_files = new List<int[]>();
+        List<int[]> targetValues_this = new List<int[]>();
         for (int i = 0; i < array.Length; i++)
         {
             int[] values = new int[3];
@@ -56,46 +61,95 @@ public class FileManager : MonoBehaviour
             {
                 values[j] = UnityEngine.Random.Range(0, im.MaxSettings);
             }
-            targetValues_files.Add(values);
+            targetValues_this.Add(values);
         }
-        return targetValues_files;
+        return targetValues_this;
     }
 
-    public FilePack GetNextFile()
+    private void HandleModeChange(InterfaceManager.Mode newMode)
     {
-        currentFile++;
-        if (currentFile >= fileSource.Length)
-        {
-            currentFile = 0;
-        }
-        FilePack file = new FilePack(fileSource[currentFile], targetValues_files[currentFile]);
-        return file;
-    }
-   
-    public FilePack GetPreviousFile()
-    {
-        currentFile--;
-        if (currentFile <0)
-        {
-            currentFile = fileSource.Length-1;
-        }
-        FilePack file = new FilePack(fileSource[currentFile], targetValues_files[currentFile]);
-        return file;
+        im.UpdateDisplayMode(newMode);
     }
 
-    public FilePack GetRandomFile()
+    private void SetInitialText()
     {
-        int rand = UnityEngine.Random.Range(0, fileSource.Length);
-        currentFile = rand;
-        FilePack file = new FilePack(fileSource[currentFile], targetValues_files[currentFile]);
-        return file;
+        int rand = UnityEngine.Random.Range(0, textSource.Length);
+        currentText = rand;
+        PushCurrentText();
     }
 
-    public SpritePack GetRandomSprite()
+    private void SetInitialSprite()
     {
         int rand = UnityEngine.Random.Range(0, spriteSource.Length);
         currentSprite = rand;
-        SpritePack pack = new SpritePack(spriteSource[currentSprite], targetValues_sprites[currentSprite]);
-        return pack;
+        PushCurrentSprite();
     }
+
+    #region Public Methods
+
+    public void PushCurrentText()
+    {
+        TextPack file = new TextPack(textSource[currentText], targetValues_text[currentText]);
+        textCE.InitializeNewFile(file);
+    }
+
+    public void PushCurrentSprite()
+    {
+        SpritePack spritePack = new SpritePack(spriteSource[currentSprite], targetValues_sprites[currentSprite]);
+        imageCE.InitializeNewFile(spritePack);
+    }
+
+    public void StepToNextFile(InterfaceManager.Mode currentMode)
+    {
+        if (currentMode == InterfaceManager.Mode.Text)
+        {
+            currentText++;
+            if (currentText >= textSource.Length)
+            {
+                currentText = 0;
+            }
+            PushCurrentText();
+            return;
+        }
+
+        if (currentMode == InterfaceManager.Mode.Image)
+        {
+            currentSprite++;
+            if (currentSprite >= spriteSource.Length)
+            {
+                currentSprite = 0;
+            }
+            PushCurrentSprite();
+            return;
+        }
+    }
+   
+    public void StepBackFile(InterfaceManager.Mode currentMode)
+    {
+        if (currentMode == InterfaceManager.Mode.Text)
+        {
+            currentText--;
+            if (currentText < 0)
+            {
+                currentText = textSource.Length - 1;
+            }
+            PushCurrentText();
+            return;
+        }
+
+        if (currentMode == InterfaceManager.Mode.Image)
+        {
+            currentSprite--;
+            if (currentSprite < 0)
+            {
+                currentSprite = spriteSource.Length - 1;
+            }
+            PushCurrentSprite();
+            return;
+        }
+
+    }
+
+
+    #endregion
 }

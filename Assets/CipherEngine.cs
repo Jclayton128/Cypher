@@ -8,15 +8,17 @@ using System;
 public abstract class CipherEngine : MonoBehaviour
 {
     protected InterfaceManager im;
+    protected bool isReadyToObfuscate = false;
 
     protected virtual void Start()
     {
         im = FindObjectOfType<InterfaceManager>();
-        im.OnSlidersMoved += Obfuscate;
-    }   
+    }
 
 
     public abstract void Obfuscate();
 
+
+    public abstract void InitializeNewFile(System.Object newFile);
 }
 

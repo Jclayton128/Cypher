@@ -9,8 +9,6 @@ public class TextCipherEngine : CipherEngine
 {
     FileManager fm;
 
-
-
     [SerializeField] char[] letterPool;
     char space = '_';
     
@@ -33,18 +31,21 @@ public class TextCipherEngine : CipherEngine
         base.Start();
         fm = FindObjectOfType<FileManager>();
         CreateLetterPool();
-        InitializeNewFile(fm.GetRandomFile());
+        //InitializeNewFile(fm.SetInitialText());
     }
     
-    public void InitializeNewFile(FilePack file)
+    public override void InitializeNewFile(System.Object newObject)
     {
-        plainText = file.FilePlaintext;
+        TextPack file = (TextPack)newObject;
+        plainText = "<mspace>" + file.FilePlaintext + "</mspace>";
         targetValue_Suppression = file.TargetValues[0];
         targetValue_Encryption = file.TargetValues[1];
         targetValue_Scramble = file.TargetValues[2];
 
         InitializeParameterizedSettings();
         GenerateParameterizedSettings();
+
+        isReadyToObfuscate = true;
 
         Obfuscate();
     }
@@ -123,6 +124,11 @@ public class TextCipherEngine : CipherEngine
     #endregion
     public override void Obfuscate()
     {
+        if (!isReadyToObfuscate)
+        {
+            Debug.Log("Not ready to obfuscate");
+            return;
+        }
         char[] cypherChars = plainText.ToCharArray();
 
         cypherChars = ApplyEncryption(cypherChars, im.SliderValue_1);
@@ -133,17 +139,6 @@ public class TextCipherEngine : CipherEngine
         cypherText = AssembleCypherText(cypherChars);
 
         im.UpdateDisplay(cypherText);
-    }
-
-
-    public void MoveToNextFile()
-    {
-        InitializeNewFile(fm.GetNextFile());
-    }
-
-    public void MoveBackOneFile()
-    {
-        InitializeNewFile(fm.GetPreviousFile());
     }
 
     #region Helpers

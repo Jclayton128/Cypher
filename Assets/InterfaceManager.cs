@@ -9,14 +9,17 @@ using System;
 public class InterfaceManager : MonoBehaviour
 {
     protected TextMeshProUGUI displayTextTMP;
-    public Image imageScreen { get; protected set; }
-    Image backgroundScreen;
+    TextCipherEngine textCE;
+    ImageCipherEngine imageCE;
+    FileManager fm;
+    public Image ImageScreen { get; protected set; }
     protected Slider slider0;
     protected Slider slider1;
     protected Slider slider2;
+    protected Slider toggleMode;
 
     public Action OnSlidersMoved;
-
+    public Action<Mode> OnModeChanged;
     public enum Mode { Text, Image};
 
     //settings
@@ -27,6 +30,7 @@ public class InterfaceManager : MonoBehaviour
     public int SliderValue_1 { get; private set; }
     public int SliderValue_2 { get; private set; }
     public Mode CurrentMode { get; private set; }
+    protected CipherEngine currentCipherEngine;
 
     public 
 
@@ -34,17 +38,23 @@ public class InterfaceManager : MonoBehaviour
     void Start()
     {
         FindComponents();
+        HandleModeToggled();
         SetupSliders();
+        HandleUpdatedSliders();
+        UpdateDisplayMode(CurrentMode);
     }
 
     private void FindComponents()
     {
         displayTextTMP = GameObject.FindGameObjectWithTag("ScreenText").GetComponent<TextMeshProUGUI>();
-        imageScreen = GameObject.FindGameObjectWithTag("Screen").GetComponent<Image>();
-        //backgroundScreen = GameObject.FindGameObjectWithTag("BackgroundScreen").GetComponent<Image>();
+        ImageScreen = GameObject.FindGameObjectWithTag("Screen").GetComponent<Image>();
         slider0 = GameObject.FindGameObjectWithTag("Slider0").GetComponent<Slider>();
         slider1 = GameObject.FindGameObjectWithTag("Slider1").GetComponent<Slider>();
         slider2 = GameObject.FindGameObjectWithTag("Slider2").GetComponent<Slider>();
+        toggleMode = GameObject.FindGameObjectWithTag("ToggleMode").GetComponent<Slider>();
+        imageCE = FindObjectOfType<ImageCipherEngine>();
+        textCE = FindObjectOfType<TextCipherEngine>();
+        fm = FindObjectOfType<FileManager>();
     }
 
     protected void SetupSliders()
@@ -58,9 +68,10 @@ public class InterfaceManager : MonoBehaviour
         slider2.minValue = 0;
         slider2.maxValue = MaxSettings - 1;
         slider2.value = 0;
-        SliderValue_0 = Mathf.RoundToInt(slider0.value);
-        SliderValue_1 = Mathf.RoundToInt(slider1.value);
-        SliderValue_2 = Mathf.RoundToInt(slider2.value);
+        toggleMode.value = 0;
+        //SliderValue_0 = Mathf.RoundToInt(slider0.value);
+        //SliderValue_1 = Mathf.RoundToInt(slider1.value);
+        //SliderValue_2 = Mathf.RoundToInt(slider2.value);
     }
 
     public void HandleUpdatedSliders()
@@ -69,39 +80,90 @@ public class InterfaceManager : MonoBehaviour
         SliderValue_1 = Mathf.RoundToInt(slider1.value);
         SliderValue_2 = Mathf.RoundToInt(slider2.value);
 
-        OnSlidersMoved?.Invoke();
+        currentCipherEngine.Obfuscate();
     }
 
     public void HandleModeToggled()
     {
+        currentCipherEngine = textCE;
+        if (toggleMode.value == 0)
+        {
+            CurrentMode = Mode.Text;
+            currentCipherEngine = textCE;
+        }
+        if (toggleMode.value == 1)
+        {
+            CurrentMode = Mode.Image;
+            currentCipherEngine = imageCE;
+        }
+        //else
+        //{
+        //    currentCipherEngine = textCE;
+        //    Debug.Log($"invoking fallback mode selection of {currentCipherEngine}");
+        //}
+        OnModeChanged?.Invoke(CurrentMode);
+
 
     }
 
-    public void UpdateDisplay(string text)
+    public void HandleNextPressed()
     {
-        displayTextTMP.gameObject.SetActive(true);
-        backgroundScreen.gameObject.SetActive(true);
-        imageScreen.gameObject.SetActive(false);
+        fm.StepToNextFile(CurrentMode);
+    }
 
+    public void HandleBackPressed()
+    {
+        fm.StepBackFile(CurrentMode);
+    }
+
+    public void UpdateDisplayMode(Mode newMode)
+    {
+        Debug.Log($"updating mode to {newMode}");
+        switch (newMode)
+        {
+            case Mode.Image:
+                displayTextTMP.gameObject.SetActive(false);
+                ImageScreen.gameObject.SetActive(true);
+                return;
+
+            case Mode.Text:
+                displayTextTMP.gameObject.SetActive(true);
+                ImageScreen.gameObject.SetActive(false);
+                return;
+
+
+        }
+    }
+
+    public bool UpdateDisplay(string text)
+    {
+        if (CurrentMode != Mode.Text)
+        {
+            Debug.Log($"Cannot send text while in {CurrentMode} mode");
+            return false;
+        }
         displayTextTMP.text = text;
+        return true;
     }
 
-    public void UpdateDisplay(Sprite sprite)
+    public bool UpdateDisplay(Sprite sprite)
     {
-        displayTextTMP.gameObject.SetActive(false);
-        backgroundScreen.gameObject.SetActive(false);
-        imageScreen.gameObject.SetActive(true);
-
-        imageScreen.sprite = sprite;
+        if (CurrentMode != Mode.Image)
+        {
+            Debug.Log($"Cannot send images while in {CurrentMode} mode");
+            return false;
+        }
+        ImageScreen.sprite = sprite;
+        return true;
     }
 
     public Material GetScreenMaterial()
     {
-        return imageScreen.material;
+        return ImageScreen.material;
     }
 
     public Image GetScreenImage()
     {
-        return imageScreen;
+        return ImageScreen;
     }
 }
