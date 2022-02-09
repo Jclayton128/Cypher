@@ -15,6 +15,7 @@ public class TextCipherEngine : CipherEngine
     //settings
     int maxEncryptionShift = 2;
 
+
     //state
     int targetValue_Suppression = 10;
     int targetValue_Encryption = 10;

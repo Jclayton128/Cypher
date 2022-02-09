@@ -18,6 +18,8 @@ public class InterfaceManager : MonoBehaviour
     protected Slider slider2;
     protected Slider toggleMode;
 
+    [SerializeField] TextMeshProUGUI[] sliderLabels = null;
+    
     public Action OnSlidersMoved;
     public Action<Mode> OnModeChanged;
     public enum Mode { Text, Image};
@@ -74,6 +76,15 @@ public class InterfaceManager : MonoBehaviour
         //SliderValue_2 = Mathf.RoundToInt(slider2.value);
     }
 
+    private void UpdateLabels()
+    {
+        string[] labels = currentCipherEngine.GetSliderLabels();
+        for (int i = 0; i < sliderLabels.Length; i++)
+        {
+            sliderLabels[i].text = labels[i];
+        }
+    }
+
     public void HandleUpdatedSliders()
     {
         SliderValue_0 = Mathf.RoundToInt(slider0.value);
@@ -101,6 +112,7 @@ public class InterfaceManager : MonoBehaviour
         //    currentCipherEngine = textCE;
         //    Debug.Log($"invoking fallback mode selection of {currentCipherEngine}");
         //}
+        UpdateLabels();
         OnModeChanged?.Invoke(CurrentMode);
 
 
