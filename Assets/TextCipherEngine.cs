@@ -38,7 +38,7 @@ public class TextCipherEngine : CipherEngine
     public override void InitializeNewFile(System.Object newObject)
     {
         TextPack file = (TextPack)newObject;
-        plainText = "<mspace>" + file.FilePlaintext + "</mspace>";
+        plainText = file.FilePlaintext;
         targetValue_Suppression = file.TargetValues[0];
         targetValue_Encryption = file.TargetValues[1];
         targetValue_Scramble = file.TargetValues[2];

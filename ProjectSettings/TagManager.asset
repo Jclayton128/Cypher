@@ -11,6 +11,7 @@ TagManager:
   - Screen
   - BackgroundScreen
   - ToggleMode
+  - SuspectScreen
   layers:
   - Default
   - TransparentFX

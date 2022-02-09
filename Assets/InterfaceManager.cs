@@ -22,7 +22,7 @@ public class InterfaceManager : MonoBehaviour
     
     public Action OnSlidersMoved;
     public Action<Mode> OnModeChanged;
-    public enum Mode { Text, Image};
+    public enum Mode { Text, Image, Suspect};
 
     //settings
     public int MaxSettings { get; private set; } = 20;
@@ -107,6 +107,10 @@ public class InterfaceManager : MonoBehaviour
             CurrentMode = Mode.Image;
             currentCipherEngine = imageCE;
         }
+        if (toggleMode.value == 2)
+        {
+            CurrentMode = Mode.Suspect;
+        }
         //else
         //{
         //    currentCipherEngine = textCE;
@@ -140,6 +144,11 @@ public class InterfaceManager : MonoBehaviour
 
             case Mode.Text:
                 displayTextTMP.gameObject.SetActive(true);
+                ImageScreen.gameObject.SetActive(false);
+                return;
+
+            case Mode.Suspect:
+                displayTextTMP.gameObject.SetActive(false);
                 ImageScreen.gameObject.SetActive(false);
                 return;
 
