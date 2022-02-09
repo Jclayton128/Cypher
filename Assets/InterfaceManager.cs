@@ -9,13 +9,15 @@ using System;
 public class InterfaceManager : MonoBehaviour
 {
     protected TextMeshProUGUI displayTextTMP;
-    public RawImage imageScreen { get; protected set; }
+    public Image imageScreen { get; protected set; }
     Image backgroundScreen;
     protected Slider slider0;
     protected Slider slider1;
     protected Slider slider2;
 
     public Action OnSlidersMoved;
+
+    public enum Mode { Text, Image};
 
     //settings
     public int MaxSettings { get; private set; } = 20;
@@ -24,6 +26,9 @@ public class InterfaceManager : MonoBehaviour
     public int SliderValue_0 { get; private set; }
     public int SliderValue_1 { get; private set; }
     public int SliderValue_2 { get; private set; }
+    public Mode CurrentMode { get; private set; }
+
+    public 
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +40,8 @@ public class InterfaceManager : MonoBehaviour
     private void FindComponents()
     {
         displayTextTMP = GameObject.FindGameObjectWithTag("ScreenText").GetComponent<TextMeshProUGUI>();
-        imageScreen = GameObject.FindGameObjectWithTag("Screen").GetComponent<RawImage>();
-        backgroundScreen = GameObject.FindGameObjectWithTag("BackgroundScreen").GetComponent<Image>();
+        imageScreen = GameObject.FindGameObjectWithTag("Screen").GetComponent<Image>();
+        //backgroundScreen = GameObject.FindGameObjectWithTag("BackgroundScreen").GetComponent<Image>();
         slider0 = GameObject.FindGameObjectWithTag("Slider0").GetComponent<Slider>();
         slider1 = GameObject.FindGameObjectWithTag("Slider1").GetComponent<Slider>();
         slider2 = GameObject.FindGameObjectWithTag("Slider2").GetComponent<Slider>();
@@ -67,6 +72,11 @@ public class InterfaceManager : MonoBehaviour
         OnSlidersMoved?.Invoke();
     }
 
+    public void HandleModeToggled()
+    {
+
+    }
+
     public void UpdateDisplay(string text)
     {
         displayTextTMP.gameObject.SetActive(true);
@@ -76,12 +86,22 @@ public class InterfaceManager : MonoBehaviour
         displayTextTMP.text = text;
     }
 
-    public void UpdateDisplay(Texture2D texture)
+    public void UpdateDisplay(Sprite sprite)
     {
         displayTextTMP.gameObject.SetActive(false);
         backgroundScreen.gameObject.SetActive(false);
         imageScreen.gameObject.SetActive(true);
 
-        imageScreen.texture = texture;
+        imageScreen.sprite = sprite;
+    }
+
+    public Material GetScreenMaterial()
+    {
+        return imageScreen.material;
+    }
+
+    public Image GetScreenImage()
+    {
+        return imageScreen;
     }
 }
