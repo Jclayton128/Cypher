@@ -28,6 +28,6 @@ public class SuspectFile : ScriptableObject
 
     public void ResetSuspicion()
     {
-        CurrentSuspicion = 0;
+        CurrentSuspicion = 1;
     }
 }

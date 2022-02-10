@@ -11,13 +11,14 @@ public class FileManager : MonoBehaviour
     [SerializeField] string[] textSource = null;
     [SerializeField] Sprite[] spriteSource = null;
     [SerializeField] SuspectFile[] suspectSource = null;
-    List<SuspectFile> currentSuspects = new List<SuspectFile>();
+    [SerializeField] SuspectFile blankSuspectFile = null;
 
     //settings
     int maxStringLength = 46;
     char underscore = '_';
 
     //state
+    List<SuspectFile> currentSuspects = new List<SuspectFile>();
     int currentText;
     int currentSprite;
     int currentSuspect;
@@ -154,7 +155,8 @@ public class FileManager : MonoBehaviour
     public void UpdateSuspicion(int amount)
     {
         currentSuspects[currentSuspect].CurrentSuspicion = amount;
-        PushCurrentSuspect();
+        //PushCurrentSuspect();
+        im.UpdateSuspectDisplaySuspicionOnly(amount);
     }
 
     public void StepToNextFile(InterfaceManager.Mode currentMode)
@@ -195,7 +197,29 @@ public class FileManager : MonoBehaviour
             return;
         }
     }
-   
+
+    public void CheckForGuilty(int sliderValue_2)
+    {
+        //if (sliderValue_1 == 0 && currentSuspects[currentSuspect].CurrentSuspicion == 0)
+        //{
+        //    currentSuspects.RemoveAt(currentSuspect);
+        //    im.UpdateSuspectDisplay(blankSuspectFile);
+        //    if (currentSuspect > currentSuspects.Count)
+        //    {
+        //        currentSuspect--;
+        //    }
+        //    if (currentSuspect < 0)
+        //    {
+        //        currentSuspect = 0;
+        //    }
+        //}
+        if (sliderValue_2 == 3 && currentSuspects[currentSuspect].CurrentSuspicion == 3)
+        {
+            //TODO Expose a "Submit Answer" button and go to endgame
+            Debug.Log($"You've accused {currentSuspects[currentSuspect]} of the crime!");
+        }
+    }
+
     public void StepBackFile(InterfaceManager.Mode currentMode)
     {
         if (currentMode == InterfaceManager.Mode.Text)

@@ -89,10 +89,10 @@ public class InterfaceManager : MonoBehaviour
             slider0.maxValue = 3;
             //slider0.value = fm.GetCurrentSuspectSuspicion();
             slider1.minValue = 0;
-            slider1.maxValue = 3;
-            slider1.value = 3;
+            slider1.maxValue = 0;
+            slider1.value = 0;
             slider2.minValue = 0;
-            slider2.maxValue = 3;
+            slider2.maxValue = 0;
             slider2.value = 0;
         }
 
@@ -112,12 +112,10 @@ public class InterfaceManager : MonoBehaviour
             {
                 sliderLabels[i].text = " ";
             }
-
-            if (SuspectGuiltinessSlider.value == 0)
-            {
-                sliderLabels[1].text = "Yes << Not Guilty?";
-            }
-
+            //if (SuspectGuiltinessSlider.value == 0)
+            //{
+            //    sliderLabels[1].text = "Yes << Not Guilty?";
+            //}
             if (SuspectGuiltinessSlider.value == 3)
             {
                 sliderLabels[2].text = "Guilty? >> Yes";
@@ -147,6 +145,18 @@ public class InterfaceManager : MonoBehaviour
         if (CurrentMode == Mode.Suspect)
         {
             fm.UpdateSuspicion(SliderValue_0);
+
+            if (SuspectGuiltinessSlider.value == 3)
+            {
+                slider2.maxValue = 3;
+            }
+            else
+            {
+                slider2.maxValue = 0;
+                slider2.value = 0;
+            }
+
+            fm.CheckForGuilty(SliderValue_2);
             UpdateLabels();
         }
     }
@@ -261,6 +271,14 @@ public class InterfaceManager : MonoBehaviour
         }
         SuspectGuiltinessSlider.value = newSuspectFile.CurrentSuspicion;
         slider0.value = newSuspectFile.CurrentSuspicion;
+        SetupSliders();
+        UpdateLabels();
+    }
+
+    public void UpdateSuspectDisplaySuspicionOnly(int suspicionAmount)
+    {
+        SuspectGuiltinessSlider.value = suspicionAmount;
+        slider0.value = suspicionAmount;
         UpdateLabels();
     }
 
