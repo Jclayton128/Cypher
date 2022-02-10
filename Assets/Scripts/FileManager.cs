@@ -10,14 +10,17 @@ public class FileManager : MonoBehaviour
     ImageCipherEngine imageCE;
     [SerializeField] string[] textSource = null;
     [SerializeField] Sprite[] spriteSource = null;
+    [SerializeField] SuspectFile[] suspectSource = null;
+    List<SuspectFile> currentSuspects = new List<SuspectFile>();
 
     //settings
     int maxStringLength = 46;
     char underscore = '_';
 
     //state
-    public int currentText;
-    public int currentSprite;
+    int currentText;
+    int currentSprite;
+    int currentSuspect;
     List<int[]> targetValues_text;
     List<int[]> targetValues_sprites;
 
@@ -28,11 +31,13 @@ public class FileManager : MonoBehaviour
         textCE = FindObjectOfType<TextCipherEngine>();
         imageCE = FindObjectOfType<ImageCipherEngine>();
         PrepareTextFiles();
+        PrepareSuspectFiles();
         targetValues_text = GenerateTargetValues(textSource);
         targetValues_sprites = GenerateTargetValues(spriteSource);
 
         SetInitialText();
         SetInitialSprite();
+        SetInitialSuspect();
     }
 
     private void PrepareTextFiles()
@@ -48,6 +53,16 @@ public class FileManager : MonoBehaviour
             {
                 textSource[i] += underscore;
             }                
+        }
+    }
+
+    private void PrepareSuspectFiles()
+    {
+        currentSuspects.Clear();
+        foreach (var suspect in suspectSource)
+        {
+            suspect.ResetSuspicion();
+            currentSuspects.Add(suspect);
         }
     }
 
@@ -85,6 +100,14 @@ public class FileManager : MonoBehaviour
         currentSprite = rand;
         PushCurrentSprite();
     }
+
+    private void SetInitialSuspect()
+    {
+        int rand = UnityEngine.Random.Range(0, suspectSource.Length);
+        currentSuspect = rand;
+        PushCurrentSuspect();
+    }
+
     private void PushFileIndexToDisplay(InterfaceManager.Mode currentMode)
     {
         switch (currentMode)
@@ -99,26 +122,40 @@ public class FileManager : MonoBehaviour
                 return;
 
             case InterfaceManager.Mode.Suspect:
-
+                im.UpdateFileIndexDisplay($"{currentSuspect + 1}/{currentSuspects.Count}");
                 return;
         }
     }
 
-    #region Public Methods
-
-    public void PushCurrentText()
+    private void PushCurrentText()
     {
         TextPack file = new TextPack(textSource[currentText], targetValues_text[currentText]);
         textCE.InitializeNewFile(file);
     }
-
-    public void PushCurrentSprite()
+    private void PushCurrentSprite()
     {
         SpritePack spritePack = new SpritePack(spriteSource[currentSprite], targetValues_sprites[currentSprite]);
         imageCE.InitializeNewFile(spritePack);
     }
 
-   
+    private void PushCurrentSuspect()
+    {
+        im.UpdateSuspectDisplay(currentSuspects[currentSuspect]);
+    }
+
+
+    #region Public Methods
+
+    public int GetCurrentSuspectSuspicion()
+    {
+        return currentSuspects[currentSuspect].CurrentSuspicion;
+    }
+
+    public void UpdateSuspicion(int amount)
+    {
+        currentSuspects[currentSuspect].CurrentSuspicion = amount;
+        PushCurrentSuspect();
+    }
 
     public void StepToNextFile(InterfaceManager.Mode currentMode)
     {
@@ -143,6 +180,18 @@ public class FileManager : MonoBehaviour
             }
             PushFileIndexToDisplay(currentMode);
             PushCurrentSprite();
+            return;
+        }
+
+        if (currentMode == InterfaceManager.Mode.Suspect)
+        {
+            currentSuspect++;
+            if (currentSuspect >= currentSuspects.Count)
+            {
+                currentSuspect = 0;
+            }
+            PushFileIndexToDisplay(currentMode);
+            PushCurrentSuspect();
             return;
         }
     }
@@ -170,6 +219,18 @@ public class FileManager : MonoBehaviour
             }
             PushFileIndexToDisplay(currentMode);
             PushCurrentSprite();
+            return;
+        }
+
+        if (currentMode == InterfaceManager.Mode.Suspect)
+        {
+            currentSuspect--;
+            if (currentSuspect < 0)
+            {
+                currentSuspect = currentSuspects.Count - 1;
+            }
+            PushFileIndexToDisplay(currentMode);
+            PushCurrentSuspect();
             return;
         }
 
