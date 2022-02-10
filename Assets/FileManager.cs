@@ -69,6 +69,7 @@ public class FileManager : MonoBehaviour
     private void HandleModeChange(InterfaceManager.Mode newMode)
     {
         im.UpdateDisplayMode(newMode);
+        PushFileIndexToDisplay(newMode);
     }
 
     private void SetInitialText()
@@ -83,6 +84,24 @@ public class FileManager : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, spriteSource.Length);
         currentSprite = rand;
         PushCurrentSprite();
+    }
+    private void PushFileIndexToDisplay(InterfaceManager.Mode currentMode)
+    {
+        switch (currentMode)
+        {
+            case InterfaceManager.Mode.Image:
+                im.UpdateFileIndexDisplay($"{currentSprite+1}/{spriteSource.Length}");
+
+                return;
+
+            case InterfaceManager.Mode.Text:
+                im.UpdateFileIndexDisplay($"{currentText+1}/{textSource.Length}");
+                return;
+
+            case InterfaceManager.Mode.Suspect:
+
+                return;
+        }
     }
 
     #region Public Methods
@@ -99,6 +118,8 @@ public class FileManager : MonoBehaviour
         imageCE.InitializeNewFile(spritePack);
     }
 
+   
+
     public void StepToNextFile(InterfaceManager.Mode currentMode)
     {
         if (currentMode == InterfaceManager.Mode.Text)
@@ -108,6 +129,7 @@ public class FileManager : MonoBehaviour
             {
                 currentText = 0;
             }
+            PushFileIndexToDisplay(currentMode);
             PushCurrentText();
             return;
         }
@@ -119,6 +141,7 @@ public class FileManager : MonoBehaviour
             {
                 currentSprite = 0;
             }
+            PushFileIndexToDisplay(currentMode);
             PushCurrentSprite();
             return;
         }
@@ -133,6 +156,7 @@ public class FileManager : MonoBehaviour
             {
                 currentText = textSource.Length - 1;
             }
+            PushFileIndexToDisplay(currentMode);
             PushCurrentText();
             return;
         }
@@ -144,6 +168,7 @@ public class FileManager : MonoBehaviour
             {
                 currentSprite = spriteSource.Length - 1;
             }
+            PushFileIndexToDisplay(currentMode);
             PushCurrentSprite();
             return;
         }
