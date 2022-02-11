@@ -8,14 +8,14 @@ using System;
 
 public class InterfaceManager : MonoBehaviour
 {
-    protected TextMeshProUGUI displayTextTMP;
+    [SerializeField] TextMeshProUGUI displayTextTMP = null;
     TextCipherEngine textCE;
     ImageCipherEngine imageCE;
+    AudioCipherEngine audioCE;
     FileManager fm;
-    public Image ImageScreen { get; protected set; }
-    [SerializeField] Slider slider0 = null;
-    [SerializeField] Slider slider1 = null;
-    [SerializeField] Slider slider2 = null;
+    [SerializeField] Image ImageScreen = null;
+    [SerializeField] Image PaintingScreen = null;
+    [SerializeField] Slider[] sliders = null;
     [SerializeField] Slider toggleMode = null;
 
     [SerializeField] GameObject SuspectScreen = null;
@@ -31,7 +31,7 @@ public class InterfaceManager : MonoBehaviour
     
     public Action OnSlidersMoved;
     public Action<Mode> OnModeChanged;
-    public enum Mode { Text, Image, Suspect};
+    public enum Mode { Text, Sprite, Audio};
 
     //settings
     public int MaxSettings { get; private set; } = 20;
@@ -49,80 +49,45 @@ public class InterfaceManager : MonoBehaviour
     void Start()
     {
         FindComponents();
-        toggleMode.value = 0;
-        HandleModeToggled();
+
         SetupSliders();
-        HandleUpdatedSliders();
+        InitializeGame();
+    }
+
+    public void InitializeGame()
+    {
+        HandleModeToggled(true);
+        HandleUpdatedSliders(true);
         UpdateDisplayMode(CurrentMode);
     }
 
     private void FindComponents()
     {
-        displayTextTMP = GameObject.FindGameObjectWithTag("ScreenText").GetComponent<TextMeshProUGUI>();
-        ImageScreen = GameObject.FindGameObjectWithTag("Screen").GetComponent<Image>();
-        slider0 = GameObject.FindGameObjectWithTag("Slider0").GetComponent<Slider>();
-        slider1 = GameObject.FindGameObjectWithTag("Slider1").GetComponent<Slider>();
-        slider2 = GameObject.FindGameObjectWithTag("Slider2").GetComponent<Slider>();
-        toggleMode = GameObject.FindGameObjectWithTag("ToggleMode").GetComponent<Slider>();
+        //displayTextTMP = GameObject.FindGameObjectWithTag("ScreenText").GetComponent<TextMeshProUGUI>();
+        //ImageScreen = GameObject.FindGameObjectWithTag("Screen").GetComponent<Image>();
+        //slider0 = GameObject.FindGameObjectWithTag("Slider0").GetComponent<Slider>();
+        //slider1 = GameObject.FindGameObjectWithTag("Slider1").GetComponent<Slider>();
+        //slider2 = GameObject.FindGameObjectWithTag("Slider2").GetComponent<Slider>();
+        //toggleMode = GameObject.FindGameObjectWithTag("ToggleMode").GetComponent<Slider>();
         imageCE = FindObjectOfType<ImageCipherEngine>();
         textCE = FindObjectOfType<TextCipherEngine>();
+        audioCE = FindObjectOfType<AudioCipherEngine>();
         fm = FindObjectOfType<FileManager>();
     }
 
     protected void SetupSliders()
     {
-        if (CurrentMode == Mode.Image || CurrentMode == Mode.Text)
+        for (int i = 0; i < sliders.Length; i++)
         {
-            slider0.minValue = 0;
-            slider0.maxValue = MaxSettings - 1;
-            slider0.value = 0;
-            slider1.minValue = 0;
-            slider1.maxValue = MaxSettings - 1;
-            slider1.value = 0;
-            slider2.minValue = 0;
-            slider2.maxValue = MaxSettings - 1;
-            slider2.value = 0;
+            sliders[i].minValue = 0;
+            sliders[i].maxValue = MaxSettings - 1;
+            sliders[i].value = 0;
         }
-        if (CurrentMode == Mode.Suspect)
-        {
-            slider0.minValue = 0;
-            slider0.maxValue = 3;
-            //slider0.value = fm.GetCurrentSuspectSuspicion();
-            slider1.minValue = 0;
-            slider1.maxValue = 0;
-            slider1.value = 0;
-            slider2.minValue = 0;
-            slider2.maxValue = 0;
-            slider2.value = 0;
-        }
-
-        //SliderValue_0 = Mathf.RoundToInt(slider0.value);
-        //SliderValue_1 = Mathf.RoundToInt(slider1.value);
-        //SliderValue_2 = Mathf.RoundToInt(slider2.value);
     }
 
 
     private void UpdateLabels()
     {
-        if (CurrentMode == Mode.Suspect)
-        {
-            sliderLabels[0].text = "< Suspicion >";
-
-            for (int i = 1; i < sliderLabels.Length; i++)
-            {
-                sliderLabels[i].text = " ";
-            }
-            //if (SuspectGuiltinessSlider.value == 0)
-            //{
-            //    sliderLabels[1].text = "Yes << Not Guilty?";
-            //}
-            if (SuspectGuiltinessSlider.value == 3)
-            {
-                sliderLabels[2].text = "Guilty? >> Yes";
-            }
-
-            return;
-        }
 
         string[] labels = currentCipherEngine.GetSliderLabels();
         for (int i = 0; i < sliderLabels.Length; i++)
@@ -131,52 +96,47 @@ public class InterfaceManager : MonoBehaviour
         }
     }
 
-    #region Button Handlers
-    public void HandleUpdatedSliders()
-    {
-        SliderValue_0 = Mathf.RoundToInt(slider0.value);
-        SliderValue_1 = Mathf.RoundToInt(slider1.value);
-        SliderValue_2 = Mathf.RoundToInt(slider2.value);
 
-        if (CurrentMode == Mode.Image || CurrentMode == Mode.Text)
+    #region Button Handlers
+    public void HandleUpdatedSliders(bool isForInitialization)
+    {
+        SliderValue_0 = Mathf.RoundToInt(sliders[0].value);
+        SliderValue_1 = Mathf.RoundToInt(sliders[1].value);
+        SliderValue_2 = Mathf.RoundToInt(sliders[2].value);
+
+        if (CurrentMode == Mode.Sprite || CurrentMode == Mode.Text || CurrentMode == Mode.Audio)
         {
             currentCipherEngine.Obfuscate();
         }
-        if (CurrentMode == Mode.Suspect)
-        {
-            fm.UpdateSuspicion(SliderValue_0);
-
-            if (SuspectGuiltinessSlider.value == 3)
-            {
-                slider2.maxValue = 3;
-            }
-            else
-            {
-                slider2.maxValue = 0;
-                slider2.value = 0;
-            }
-
-            fm.CheckForGuilty(SliderValue_2);
-            UpdateLabels();
-        }
+       
     }
 
-    public void HandleModeToggled()
+    public void HandleModeToggled(bool isForInitialization)
     {
+        
         currentCipherEngine = textCE;
+
+        if (!isForInitialization)
+        {
+            int[] values = new int[3] { SliderValue_0, SliderValue_1, SliderValue_2 };
+            fm.ReceiveUpdatedSliderValues(CurrentMode, values);
+        }
+
         if (toggleMode.value == 0)
         {
             CurrentMode = Mode.Text;
             currentCipherEngine = textCE;
+            currentCipherEngine.Obfuscate();
         }
         if (toggleMode.value == 1)
         {
-            CurrentMode = Mode.Image;
+            CurrentMode = Mode.Sprite;
             currentCipherEngine = imageCE;
         }
         if (toggleMode.value == 2)
         {
-            CurrentMode = Mode.Suspect;
+            CurrentMode = Mode.Audio;
+            currentCipherEngine = audioCE;
         }
         //else
         //{
@@ -189,16 +149,40 @@ public class InterfaceManager : MonoBehaviour
 
     }
 
+
+    public void DriveSlidersToCurrentFilePreviousSetting(int[] settings)
+    {
+        for (int i = 0; i < settings.Length; i++)
+        {
+            sliders[i].value = settings[i];
+        }
+    }
+
     public void HandleNextPressed()
     {
+        int[] values = new int[3] { SliderValue_0, SliderValue_1, SliderValue_2 };
+        fm.ReceiveUpdatedSliderValues(CurrentMode, values);
         fm.StepToNextFile(CurrentMode);
     }
 
     public void HandleBackPressed()
     {
+        int[] values = new int[3] { SliderValue_0, SliderValue_1, SliderValue_2 };
+        fm.ReceiveUpdatedSliderValues(CurrentMode, values);
         fm.StepBackFile(CurrentMode);
     }
 
+    public void HandlePlayPausePressed()
+    {
+        if (CurrentMode == Mode.Audio)
+        {
+            audioCE.HandleAutoPlayToggle();
+        }
+        else
+        {
+            Debug.Log($"Cannot play audio in {CurrentMode} mode.");
+        }
+    }
 
     #endregion
 
@@ -213,9 +197,10 @@ public class InterfaceManager : MonoBehaviour
         Debug.Log($"updating mode to {newMode}");
         switch (newMode)
         {
-            case Mode.Image:
+            case Mode.Sprite:
                 displayTextTMP.gameObject.SetActive(false);
                 ImageScreen.gameObject.SetActive(true);
+                PaintingScreen.gameObject.SetActive(false);
                 SuspectScreen.gameObject.SetActive(false);
                 SetupSliders();
                 return;
@@ -224,34 +209,39 @@ public class InterfaceManager : MonoBehaviour
                 displayTextTMP.gameObject.SetActive(true);
                 ImageScreen.gameObject.SetActive(false);
                 SuspectScreen.gameObject.SetActive(false);
+                PaintingScreen.gameObject.SetActive(false);
                 SetupSliders();
                 return;
 
-            case Mode.Suspect:
-                displayTextTMP.gameObject.SetActive(false);
+            case Mode.Audio:
+                displayTextTMP.gameObject.SetActive(true);
+                displayTextTMP.text = "Audio Clip Loaded";
                 ImageScreen.gameObject.SetActive(false);
-                SuspectScreen.gameObject.SetActive(true);
+                SuspectScreen.gameObject.SetActive(false);
+                PaintingScreen.gameObject.SetActive(false);
                 SetupSliders();
                 return;
-
 
         }
     }
 
     public bool UpdateDisplay(string text)
     {
-        if (CurrentMode != Mode.Text)
+        if (CurrentMode == Mode.Text || CurrentMode == Mode.Audio)
+        {
+            displayTextTMP.text = text;
+            return true;
+        }
+        else
         {
             Debug.Log($"Cannot send text while in {CurrentMode} mode");
             return false;
         }
-        displayTextTMP.text = text;
-        return true;
     }
 
     public bool UpdateDisplay(Sprite sprite)
     {
-        if (CurrentMode != Mode.Image)
+        if (CurrentMode != Mode.Sprite)
         {
             Debug.Log($"Cannot send images while in {CurrentMode} mode");
             return false;
@@ -259,29 +249,6 @@ public class InterfaceManager : MonoBehaviour
         ImageScreen.sprite = sprite;
         return true;
     }
-
-    public void UpdateSuspectDisplay(SuspectFile newSuspectFile)
-    {
-        MugshotImage.sprite = newSuspectFile.GetSuspectMugshot();
-        SuspectNameTMP.text = newSuspectFile.GetSuspectName();
-        string[] traits = newSuspectFile.GetSuspectTraits();
-        for (int i = 0; i < SuspectTraitsTMP.Length; i++)
-        {
-            SuspectTraitsTMP[i].text = traits[i];
-        }
-        SuspectGuiltinessSlider.value = newSuspectFile.CurrentSuspicion;
-        slider0.value = newSuspectFile.CurrentSuspicion;
-        SetupSliders();
-        UpdateLabels();
-    }
-
-    public void UpdateSuspectDisplaySuspicionOnly(int suspicionAmount)
-    {
-        SuspectGuiltinessSlider.value = suspicionAmount;
-        slider0.value = suspicionAmount;
-        UpdateLabels();
-    }
-
     #endregion
 
     #region Public Helpers

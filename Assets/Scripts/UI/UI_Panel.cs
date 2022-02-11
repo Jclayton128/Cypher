@@ -5,6 +5,7 @@ using UnityEngine;
 public class UI_Panel : MonoBehaviour
 {
     public List<GameObject> elements = new List<GameObject>();
+    protected UI_Controller uic;
 
     protected virtual void Awake()
     {
@@ -12,10 +13,15 @@ public class UI_Panel : MonoBehaviour
         {
             elements.Add(transform.GetChild(i).gameObject);
         }
-        foreach (var elem in elements)
-        {
-            elem.SetActive(false);
-        }
+        //foreach (var elem in elements)
+        //{
+        //    elem.SetActive(false);
+        //}
+    }
+
+    protected virtual void Start()
+    {
+        uic = FindObjectOfType<UI_Controller>();
     }
 
     public virtual void ShowHideElements(bool shouldShow)

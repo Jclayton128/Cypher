@@ -6,14 +6,9 @@ using UnityEngine.UI;
 
 public class ImageCipherEngine : CipherEngine
 {
-    [SerializeField] Sprite spriteSource = null;
-
     Material screenMaterial;
 
     //state
-    int targetVal_0 = 10;
-    int targetVal_1 = 10;
-    int targetVal_2 = 10;
     Image screenImage;
 
     Color[] arrayPlain;

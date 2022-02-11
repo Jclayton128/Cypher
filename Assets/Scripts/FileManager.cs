@@ -6,64 +6,83 @@ using UnityEngine;
 public class FileManager : MonoBehaviour
 {
     InterfaceManager im;
+    UI_Controller uic;
     TextCipherEngine textCE;
     ImageCipherEngine imageCE;
-    [SerializeField] string[] textSource = null;
-    [SerializeField] Sprite[] spriteSource = null;
-    [SerializeField] SuspectFile[] suspectSource = null;
-    [SerializeField] SuspectFile blankSuspectFile = null;
+    AudioCipherEngine audioCE;
+    [SerializeField] CaseFile caseFile = null;
+
+    string[] textSupply = null;
+    Sprite[] spriteSupply = null;
+    AudioClue[] audioSupply = null;
+   
 
     //settings
     int maxStringLength = 46;
     char underscore = '_';
 
     //state
-    List<SuspectFile> currentSuspects = new List<SuspectFile>();
     int currentText;
     int currentSprite;
-    int currentSuspect;
+    int currentAudio;
     List<int[]> targetValues_text;
     List<int[]> targetValues_sprites;
+    List<int[]> targetValues_audio;
 
+    List<int[]> sliderState_text = new List<int[]>();
+    List<int[]> sliderState_sprites = new List<int[]>();
+    List<int[]> sliderState_audio = new List<int[]>();
     private void Start()
     {
         im = FindObjectOfType<InterfaceManager>();
         im.OnModeChanged += HandleModeChange;
         textCE = FindObjectOfType<TextCipherEngine>();
         imageCE = FindObjectOfType<ImageCipherEngine>();
+        audioCE = FindObjectOfType<AudioCipherEngine>();
+        uic = FindObjectOfType<UI_Controller>();
+        InitializeGame();
+    }
+
+    public void InitializeGame()
+    {
+        LoadCaseFile();
+
         PrepareTextFiles();
-        PrepareSuspectFiles();
-        targetValues_text = GenerateTargetValues(textSource);
-        targetValues_sprites = GenerateTargetValues(spriteSource);
+        targetValues_text = GenerateTargetValues(textSupply);
+        targetValues_sprites = GenerateTargetValues(spriteSupply);
+        targetValues_audio = GenerateTargetValues(audioSupply);
+
+        sliderState_text = PrepareSliderState(textSupply);
+        sliderState_sprites = PrepareSliderState(spriteSupply);
+        sliderState_audio = PrepareSliderState(audioSupply);
 
         SetInitialText();
         SetInitialSprite();
-        SetInitialSuspect();
+        SetInitialAudio();
     }
+
+    private void LoadCaseFile()
+    {
+        caseFile.PrepareCase();
+        audioSupply = caseFile.AudioClues_Shuffled;
+        textSupply = caseFile.TextClues_Shuffled;
+        spriteSupply = caseFile.SpriteClues_Shuffled;
+    }
+
 
     private void PrepareTextFiles()
     {
-        for (int i = 0; i < textSource.Length; i++)
+        for (int i = 0; i < textSupply.Length; i++)
         {
-            if (textSource[i].Length > maxStringLength)
+            if (textSupply[i].Length > maxStringLength)
             {
-                textSource[i].Remove(maxStringLength - 1);
+                textSupply[i].Remove(maxStringLength - 1);
             }
 
-            while (textSource[i].Length < maxStringLength)
+            while (textSupply[i].Length < maxStringLength)
             {
-                textSource[i] += underscore;
+                textSupply[i] += underscore;
             }                
-        }
-    }
-
-    private void PrepareSuspectFiles()
-    {
-        currentSuspects.Clear();
-        foreach (var suspect in suspectSource)
-        {
-            suspect.ResetSuspicion();
-            currentSuspects.Add(suspect);
         }
     }
 
@@ -82,144 +101,169 @@ public class FileManager : MonoBehaviour
         return targetValues_this;
     }
 
+    private List<int[]> PrepareSliderState(Array array)
+    {
+        List<int[]> list = new List<int[]>();
+        for (int i = 0; i < array.Length; i++)
+        {
+            int[] slidervalues = new int[3] { 0, 0, 0 };
+            list.Add(slidervalues);
+        }
+        return list;
+    } 
+
     private void HandleModeChange(InterfaceManager.Mode newMode)
     {
         im.UpdateDisplayMode(newMode);
         PushFileIndexToDisplay(newMode);
+        switch (newMode)
+        {
+            case InterfaceManager.Mode.Text:
+                im.DriveSlidersToCurrentFilePreviousSetting(sliderState_text[currentText]);
+                return;
+            case InterfaceManager.Mode.Audio:
+                im.DriveSlidersToCurrentFilePreviousSetting(sliderState_audio[currentAudio]);
+                return;
+            case InterfaceManager.Mode.Sprite:
+                im.DriveSlidersToCurrentFilePreviousSetting(sliderState_sprites[currentSprite]);
+                return;
+
+        }
+
     }
 
     private void SetInitialText()
     {
-        int rand = UnityEngine.Random.Range(0, textSource.Length);
+        int rand = UnityEngine.Random.Range(0, textSupply.Length);
         currentText = rand;
         PushCurrentText();
     }
 
     private void SetInitialSprite()
     {
-        int rand = UnityEngine.Random.Range(0, spriteSource.Length);
+        int rand = UnityEngine.Random.Range(0, spriteSupply.Length);
         currentSprite = rand;
         PushCurrentSprite();
     }
-
-    private void SetInitialSuspect()
+    private void SetInitialAudio()
     {
-        int rand = UnityEngine.Random.Range(0, suspectSource.Length);
-        currentSuspect = rand;
-        PushCurrentSuspect();
+        int rand = UnityEngine.Random.Range(0, audioSupply.Length);
+        currentAudio = rand;
+        PushCurrentAudio();
     }
 
     private void PushFileIndexToDisplay(InterfaceManager.Mode currentMode)
     {
         switch (currentMode)
         {
-            case InterfaceManager.Mode.Image:
-                im.UpdateFileIndexDisplay($"{currentSprite+1}/{spriteSource.Length}");
+            case InterfaceManager.Mode.Sprite:
+                im.UpdateFileIndexDisplay($"{currentSprite+1}/{spriteSupply.Length}");
 
                 return;
 
             case InterfaceManager.Mode.Text:
-                im.UpdateFileIndexDisplay($"{currentText+1}/{textSource.Length}");
+                im.UpdateFileIndexDisplay($"{currentText+1}/{textSupply.Length}");
                 return;
 
-            case InterfaceManager.Mode.Suspect:
-                im.UpdateFileIndexDisplay($"{currentSuspect + 1}/{currentSuspects.Count}");
+            case InterfaceManager.Mode.Audio:
+                im.UpdateFileIndexDisplay($"{currentAudio + 1}/{audioSupply.Length}");
                 return;
         }
     }
 
     private void PushCurrentText()
     {
-        TextPack file = new TextPack(textSource[currentText], targetValues_text[currentText]);
+        TextPack file = new TextPack(textSupply[currentText], targetValues_text[currentText]);
         textCE.InitializeNewFile(file);
     }
     private void PushCurrentSprite()
     {
-        SpritePack spritePack = new SpritePack(spriteSource[currentSprite], targetValues_sprites[currentSprite]);
+        SpritePack spritePack = new SpritePack(spriteSupply[currentSprite], targetValues_sprites[currentSprite]);
         imageCE.InitializeNewFile(spritePack);
     }
 
-    private void PushCurrentSuspect()
+    private void PushCurrentAudio()
     {
-        im.UpdateSuspectDisplay(currentSuspects[currentSuspect]);
+        AudioPack audioPack = new AudioPack(audioSupply[currentAudio].GetShuffledClips(), targetValues_audio[currentAudio]);
+        audioCE.InitializeNewFile(audioPack);
     }
 
 
     #region Public Methods
 
-    public int GetCurrentSuspectSuspicion()
+    public void ReceiveUpdatedSliderValues(InterfaceManager.Mode currentMode, int[] values)
     {
-        return currentSuspects[currentSuspect].CurrentSuspicion;
+        switch (currentMode)
+        {
+            case InterfaceManager.Mode.Text:
+                for (int i = 0; i < sliderState_text[currentText].Length; i++)
+                {
+                    sliderState_text[currentText][i] = values[i];
+                }
+                return;
+
+            case InterfaceManager.Mode.Sprite:
+                for (int i = 0; i < sliderState_sprites[currentSprite].Length; i++)
+                {
+                    sliderState_sprites[currentSprite][i] = values[i];
+                }
+                return;
+
+            case InterfaceManager.Mode.Audio:
+                for (int i = 0; i < sliderState_audio[currentAudio].Length; i++)
+                {
+                    sliderState_audio[currentAudio][i] = values[i];
+                }
+                return;
+
+
+        }
+
+
     }
 
-    public void UpdateSuspicion(int amount)
-    {
-        currentSuspects[currentSuspect].CurrentSuspicion = amount;
-        //PushCurrentSuspect();
-        im.UpdateSuspectDisplaySuspicionOnly(amount);
-    }
 
     public void StepToNextFile(InterfaceManager.Mode currentMode)
     {
         if (currentMode == InterfaceManager.Mode.Text)
         {
             currentText++;
-            if (currentText >= textSource.Length)
+            if (currentText >= textSupply.Length)
             {
                 currentText = 0;
             }
             PushFileIndexToDisplay(currentMode);
             PushCurrentText();
+            im.DriveSlidersToCurrentFilePreviousSetting(sliderState_text[currentText]);
             return;
         }
 
-        if (currentMode == InterfaceManager.Mode.Image)
+        if (currentMode == InterfaceManager.Mode.Sprite)
         {
             currentSprite++;
-            if (currentSprite >= spriteSource.Length)
+            if (currentSprite >= spriteSupply.Length)
             {
                 currentSprite = 0;
             }
             PushFileIndexToDisplay(currentMode);
             PushCurrentSprite();
+            im.DriveSlidersToCurrentFilePreviousSetting(sliderState_sprites[currentSprite]);
             return;
         }
 
-        if (currentMode == InterfaceManager.Mode.Suspect)
+        if (currentMode == InterfaceManager.Mode.Audio)
         {
-            currentSuspect++;
-            if (currentSuspect >= currentSuspects.Count)
+            currentAudio++;
+            if (currentAudio >= audioSupply.Length)
             {
-                currentSuspect = 0;
+                currentAudio = 0;
             }
             PushFileIndexToDisplay(currentMode);
-            PushCurrentSuspect();
+            PushCurrentAudio();
+            im.DriveSlidersToCurrentFilePreviousSetting(sliderState_audio[currentAudio]);
             return;
         }
-    }
-
-    public void CheckForGuilty(int sliderValue_2)
-    {
-        //if (sliderValue_1 == 0 && currentSuspects[currentSuspect].CurrentSuspicion == 0)
-        //{
-        //    currentSuspects.RemoveAt(currentSuspect);
-        //    im.UpdateSuspectDisplay(blankSuspectFile);
-        //    if (currentSuspect > currentSuspects.Count)
-        //    {
-        //        currentSuspect--;
-        //    }
-        //    if (currentSuspect < 0)
-        //    {
-        //        currentSuspect = 0;
-        //    }
-        //}
-        if (sliderValue_2 == 3 && currentSuspects[currentSuspect].CurrentSuspicion == 3)
-        {
-            //TODO Expose a "Submit Answer" button and go to endgame
-            Debug.Log($"You've accused {currentSuspects[currentSuspect]} of the crime!");
-        }
-    }
-
+    }  
     public void StepBackFile(InterfaceManager.Mode currentMode)
     {
         if (currentMode == InterfaceManager.Mode.Text)
@@ -227,39 +271,41 @@ public class FileManager : MonoBehaviour
             currentText--;
             if (currentText < 0)
             {
-                currentText = textSource.Length - 1;
+                currentText = textSupply.Length - 1;
             }
             PushFileIndexToDisplay(currentMode);
             PushCurrentText();
+            im.DriveSlidersToCurrentFilePreviousSetting(sliderState_text[currentText]);
             return;
         }
 
-        if (currentMode == InterfaceManager.Mode.Image)
+        if (currentMode == InterfaceManager.Mode.Sprite)
         {
             currentSprite--;
             if (currentSprite < 0)
             {
-                currentSprite = spriteSource.Length - 1;
+                currentSprite = spriteSupply.Length - 1;
             }
             PushFileIndexToDisplay(currentMode);
             PushCurrentSprite();
+            im.DriveSlidersToCurrentFilePreviousSetting(sliderState_sprites[currentSprite]);
             return;
         }
 
-        if (currentMode == InterfaceManager.Mode.Suspect)
+        if (currentMode == InterfaceManager.Mode.Audio)
         {
-            currentSuspect--;
-            if (currentSuspect < 0)
+            currentAudio--;
+            if (currentAudio < 0)
             {
-                currentSuspect = currentSuspects.Count - 1;
+                currentAudio = audioSupply.Length - 1;
             }
             PushFileIndexToDisplay(currentMode);
-            PushCurrentSuspect();
+            PushCurrentAudio();
+            im.DriveSlidersToCurrentFilePreviousSetting(sliderState_audio[currentAudio]);
             return;
         }
 
     }
-
 
     #endregion
 }

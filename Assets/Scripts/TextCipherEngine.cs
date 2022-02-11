@@ -10,16 +10,13 @@ public class TextCipherEngine : CipherEngine
     FileManager fm;
 
     [SerializeField] char[] letterPool;
-    char space = '_';
+    char space = ' ';
     
     //settings
     int maxEncryptionShift = 2;
 
 
     //state
-    int targetValue_Suppression = 10;
-    int targetValue_Encryption = 10;
-    int targetValue_Scramble = 10;
     string plainText;
     string cypherText;
     [SerializeField] bool[,] suppressions;
@@ -39,9 +36,9 @@ public class TextCipherEngine : CipherEngine
     {
         TextPack file = (TextPack)newObject;
         plainText = file.FilePlaintext;
-        targetValue_Suppression = file.TargetValues[0];
-        targetValue_Encryption = file.TargetValues[1];
-        targetValue_Scramble = file.TargetValues[2];
+        targetVal_0 = file.TargetValues[0];
+        targetVal_1 = file.TargetValues[1];
+        targetVal_2 = file.TargetValues[2];
 
         InitializeParameterizedSettings();
         GenerateParameterizedSettings();
@@ -79,9 +76,9 @@ public class TextCipherEngine : CipherEngine
         {
             for (int i = 0; i < plainText.Length; i++)
             {
-                suppressions[j, i] = ReturnWeightedBoolean(j, targetValue_Suppression);
-                encryptions[j, i] = ReturnWeightedInt(j, targetValue_Encryption);
-                scrambles[j, i] = ReturnWeightedInt(j, targetValue_Scramble);
+                suppressions[j, i] = ReturnWeightedBoolean(j, targetVal_0);
+                encryptions[j, i] = ReturnWeightedInt(j, targetVal_1);
+                scrambles[j, i] = ReturnWeightedInt(j, targetVal_2);
             }
         }
         //for (int k = 0; k < plainText.Length; k++)
