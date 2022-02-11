@@ -15,6 +15,7 @@ public class FileManager : MonoBehaviour
     string[] textSupply = null;
     Sprite[] spriteSupply = null;
     AudioClue[] audioSupply = null;
+    Sprite[] paintings = null;
    
 
     //settings
@@ -25,6 +26,7 @@ public class FileManager : MonoBehaviour
     int currentText;
     int currentSprite;
     int currentAudio;
+    int currentPainting;
     List<int[]> targetValues_text;
     List<int[]> targetValues_sprites;
     List<int[]> targetValues_audio;
@@ -59,6 +61,9 @@ public class FileManager : MonoBehaviour
         SetInitialText();
         SetInitialSprite();
         SetInitialAudio();
+
+        currentPainting = 0;
+        im.UpdatePainting(paintings[currentPainting]);
     }
 
     private void LoadCaseFile()
@@ -67,6 +72,8 @@ public class FileManager : MonoBehaviour
         audioSupply = caseFile.AudioClues_Shuffled;
         textSupply = caseFile.TextClues_Shuffled;
         spriteSupply = caseFile.SpriteClues_Shuffled;
+        paintings = caseFile.Paintings_Shuffled;
+
     }
 
 
@@ -190,6 +197,28 @@ public class FileManager : MonoBehaviour
 
 
     #region Public Methods
+
+    public void HandleGotoNextPainting()
+    {
+        currentPainting++;
+        if (currentPainting >= paintings.Length)
+        {
+            currentPainting = 0;
+        }
+
+        im.UpdatePainting(paintings[currentPainting]);
+    }
+
+    public void HandleGotoPreviousPainting()
+    {
+        currentPainting--;
+        if (currentPainting < 0)
+        {
+            currentPainting = paintings.Length - 1;
+        }
+        im.UpdatePainting(paintings[currentPainting]);
+    }
+
 
     public void ReceiveUpdatedSliderValues(InterfaceManager.Mode currentMode, int[] values)
     {

@@ -17,17 +17,15 @@ public class InterfaceManager : MonoBehaviour
     [SerializeField] Image PaintingScreen = null;
     [SerializeField] Slider[] sliders = null;
     [SerializeField] Slider toggleMode = null;
-
-    [SerializeField] GameObject SuspectScreen = null;
-    [SerializeField] Image MugshotImage = null;
-    [SerializeField] TextMeshProUGUI SuspectNameTMP = null;
-    [SerializeField] TextMeshProUGUI[] SuspectTraitsTMP = null;
-    [SerializeField] Slider SuspectGuiltinessSlider = null;
-
+    [SerializeField] TextMeshProUGUI autoplayTMP = null;
+    [SerializeField] Slider volumeSlider = null;
 
     [SerializeField] TextMeshProUGUI fileIndexTMP = null;
 
     [SerializeField] TextMeshProUGUI[] sliderLabels = null;
+
+    Sprite[] paintings;
+
     
     public Action OnSlidersMoved;
     public Action<Mode> OnModeChanged;
@@ -42,8 +40,6 @@ public class InterfaceManager : MonoBehaviour
     public int SliderValue_2 { get; private set; }
     public Mode CurrentMode { get; private set; }
     protected CipherEngine currentCipherEngine;
-
-    public 
 
     // Start is called before the first frame update
     void Start()
@@ -98,6 +94,17 @@ public class InterfaceManager : MonoBehaviour
 
 
     #region Button Handlers
+
+    public void HandlePaintingUp()
+    {
+        fm.HandleGotoNextPainting();
+    }
+
+    public void HandlePaintingDown()
+    {
+        fm.HandleGotoPreviousPainting();
+    }
+
     public void HandleUpdatedSliders(bool isForInitialization)
     {
         SliderValue_0 = Mathf.RoundToInt(sliders[0].value);
@@ -172,16 +179,29 @@ public class InterfaceManager : MonoBehaviour
         fm.StepBackFile(CurrentMode);
     }
 
-    public void HandlePlayPausePressed()
+    public void HandleAutoplayPressed()
     {
-        if (CurrentMode == Mode.Audio)
+        if (audioCE.HandleAutoPlayToggle())
         {
-            audioCE.HandleAutoPlayToggle();
+            autoplayTMP.text = "Autoplay On";
         }
         else
         {
-            Debug.Log($"Cannot play audio in {CurrentMode} mode.");
+            autoplayTMP.text = "Autoplay Off";
         }
+    }
+
+    public void HandlePlayPressed()
+    {
+        if (CurrentMode == Mode.Audio)
+        {
+            audioCE.PlayAudioClue();
+        }
+    }
+
+    public void HandleVolumeAdjust()
+    {
+        audioCE.AdjustVolume(volumeSlider.value);
     }
 
     #endregion
@@ -200,16 +220,12 @@ public class InterfaceManager : MonoBehaviour
             case Mode.Sprite:
                 displayTextTMP.gameObject.SetActive(false);
                 ImageScreen.gameObject.SetActive(true);
-                PaintingScreen.gameObject.SetActive(false);
-                SuspectScreen.gameObject.SetActive(false);
                 SetupSliders();
                 return;
 
             case Mode.Text:
                 displayTextTMP.gameObject.SetActive(true);
                 ImageScreen.gameObject.SetActive(false);
-                SuspectScreen.gameObject.SetActive(false);
-                PaintingScreen.gameObject.SetActive(false);
                 SetupSliders();
                 return;
 
@@ -217,8 +233,6 @@ public class InterfaceManager : MonoBehaviour
                 displayTextTMP.gameObject.SetActive(true);
                 displayTextTMP.text = "Audio Clip Loaded";
                 ImageScreen.gameObject.SetActive(false);
-                SuspectScreen.gameObject.SetActive(false);
-                PaintingScreen.gameObject.SetActive(false);
                 SetupSliders();
                 return;
 
@@ -248,6 +262,11 @@ public class InterfaceManager : MonoBehaviour
         }
         ImageScreen.sprite = sprite;
         return true;
+    }
+
+    public void UpdatePainting(Sprite sprite)
+    {
+        PaintingScreen.sprite = sprite;
     }
     #endregion
 

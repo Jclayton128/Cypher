@@ -30,9 +30,10 @@ public class AudioCipherEngine : CipherEngine
         //Obfuscate();
     }
 
-    public void HandleAutoPlayToggle()
+    public bool HandleAutoPlayToggle()
     {
         isInAutoPlay = !isInAutoPlay;
+        return isInAutoPlay;
 
         //if (auso_0.isPlaying)
         //{
@@ -56,15 +57,28 @@ public class AudioCipherEngine : CipherEngine
 
         if (isInAutoPlay)
         {
-            foreach (var auso in audioSources)
-            {
-                auso.Play();
-            }
+            PlayAudioClue();
+        }
+    }
+
+    public void PlayAudioClue()
+    {
+        foreach (var auso in audioSources)
+        {
+            auso.Play();
         }
     }
 
     private void HandleSlider0()
     {
         audioMouse.transform.position = new Vector2(im.SliderValue_0, 0);
+    }
+
+    public void AdjustVolume(float factor)
+    {
+        foreach (var auso in audioSources)
+        {
+            auso.volume = factor;
+        }
     }
 }
