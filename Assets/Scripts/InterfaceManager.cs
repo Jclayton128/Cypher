@@ -282,4 +282,29 @@ public class InterfaceManager : MonoBehaviour
     }
     #endregion
 
+    #region Rapid Select Methods
+
+    public void IncrementSliderViaRapidSelect(int slider, int direction)
+    {
+        sliders[slider].value += Mathf.Sign(direction);
+    }
+
+    public void CycleThroughClueModes()
+    {
+        if (toggleMode.value == toggleMode.maxValue)
+        {
+            toggleMode.value = 0;
+        }
+        else
+        {
+            toggleMode.value += 1;
+        }
+    }
+
+    public void IncrementVolumeSliderViaRapidSelect(int direction)
+    {
+        volumeSlider.value += Mathf.Sign(direction) * .2f;
+    }
+
+    #endregion
 }
