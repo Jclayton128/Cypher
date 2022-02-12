@@ -178,6 +178,11 @@ public class FileManager : MonoBehaviour
         }
     }
 
+    private void PushPaintingIndexToDisplay()
+    {
+        im.UpdatePaintingIndexDisplay($"{currentPainting+1}/{paintings.Length}");
+    }
+
     private void PushCurrentText()
     {
         TextPack file = new TextPack(textSupply[currentText], targetValues_text[currentText]);
@@ -207,6 +212,7 @@ public class FileManager : MonoBehaviour
         }
 
         im.UpdatePainting(paintings[currentPainting]);
+        PushPaintingIndexToDisplay();
     }
 
     public void HandleGotoPreviousPainting()
@@ -217,6 +223,7 @@ public class FileManager : MonoBehaviour
             currentPainting = paintings.Length - 1;
         }
         im.UpdatePainting(paintings[currentPainting]);
+        PushPaintingIndexToDisplay();
     }
 
 

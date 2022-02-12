@@ -21,6 +21,7 @@ public class InterfaceManager : MonoBehaviour
     [SerializeField] Slider volumeSlider = null;
 
     [SerializeField] TextMeshProUGUI fileIndexTMP = null;
+    [SerializeField] TextMeshProUGUI paintingIndexTMP = null;
 
     [SerializeField] TextMeshProUGUI[] sliderLabels = null;
 
@@ -210,6 +211,11 @@ public class InterfaceManager : MonoBehaviour
     public void UpdateFileIndexDisplay(string newFileIndex)
     {
         fileIndexTMP.text = newFileIndex;
+    }
+
+    public void UpdatePaintingIndexDisplay(string newPaintingIndex)
+    {
+        paintingIndexTMP.text = newPaintingIndex;
     }
 
     public void UpdateDisplayMode(Mode newMode)
