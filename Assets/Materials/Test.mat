@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ImageScreen
+  m_Name: Test
   m_Shader: {fileID: 4800000, guid: a53f4bb29f3644b43b5075c6dcfecb32, type: 3}
   m_ShaderKeywords: CHROMABERR_ON COLORRAMPOUTLINE_ON COLORRAMP_ON COLORSWAP_ON DISTORT_ON
-    FADE_ON FISHEYE_ON GRADIENT_ON GREYSCALE_ON PINCH_ON PIXELATE_ON POSTERIZEOUTLINE_ON
-    POSTERIZE_ON ZOOMUV_ON _COLORRAMPOUTLINE_ON _POSTERIZEOUTLINE_ON
+    FISHEYE_ON GREYSCALE_ON PINCH_ON PIXELATE_ON POSTERIZEOUTLINE_ON POSTERIZE_ON
+    ZOOMUV_ON _COLORRAMPOUTLINE_ON _POSTERIZEOUTLINE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -105,7 +105,7 @@ Material:
     - _DistortTexXSpeed: 0
     - _DistortTexYSpeed: 0
     - _EditorDrawers: 7
-    - _FadeAmount: 0.15
+    - _FadeAmount: 0.145
     - _FadeBurnGlow: 1
     - _FadeBurnTransition: 0.39
     - _FadeBurnWidth: 0.025
@@ -120,7 +120,7 @@ Material:
     - _GlitchSize: 0.25
     - _Glow: 10
     - _GlowGlobal: 1
-    - _GradBlend: 0.05
+    - _GradBlend: 0.071
     - _GradBoostX: 1.2
     - _GradBoostY: 1.2
     - _GradIsRadial: 0

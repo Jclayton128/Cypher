@@ -20,7 +20,7 @@ public class FileManager : MonoBehaviour
 
     //settings
     int maxStringLength = 46;
-    char underscore = '_';
+    char underscore = ' ';
 
     //state
     int currentText;

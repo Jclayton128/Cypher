@@ -92,7 +92,7 @@ public class TextCipherEngine : CipherEngine
     private bool ReturnWeightedBoolean(float currentValue, float targetValue)
     {
         int diff = Mathf.RoundToInt(Mathf.Abs(targetValue - currentValue));
-        int rand = UnityEngine.Random.Range(0, 11);
+        int rand = UnityEngine.Random.Range(0, 21);
         if (rand >= diff)
         {
             return true;
@@ -106,7 +106,7 @@ public class TextCipherEngine : CipherEngine
     private int ReturnWeightedInt(float currentValue, float targetValue)
     {
         int diff = Mathf.RoundToInt(Mathf.Abs(targetValue - currentValue));
-        int rand = UnityEngine.Random.Range(0, 11);
+        int rand = UnityEngine.Random.Range(0, 21);
         if (rand >= diff)
         {
             return 0;
