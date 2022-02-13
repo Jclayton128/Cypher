@@ -452,7 +452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1868787604272074739, guid: c0b3dc2709d4bdd4e9c6bc6c7777feb8, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1868787604272074739, guid: c0b3dc2709d4bdd4e9c6bc6c7777feb8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -797,7 +797,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.35
+  m_fontSize: 18.25
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3460,7 +3460,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.4
+  m_fontSize: 15.3
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4813,11 +4813,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1507090481}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.24722221, y: 0.2578125}
   m_AnchorMax: {x: 0.75277776, y: 0.5421875}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.000015258789, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &691602077
@@ -5272,7 +5272,6 @@ RectTransform:
   m_Children:
   - {fileID: 1549381308}
   - {fileID: 1912122591}
-  - {fileID: 1873314536}
   m_Father: {fileID: 1507090481}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5805,9 +5804,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sliderLabels:
-  - Memory Recovery
-  - Morpheme Delta
-  - Anagram Index
+  - Text Recovery
+  - Descramble
+  - Anagram
   letterPool: 
 --- !u!114 &828825923
 MonoBehaviour:
@@ -6443,7 +6442,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12.2
+  m_fontSize: 12.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7023,7 +7022,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12.7
+  m_fontSize: 12.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8595,7 +8594,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10.9
+  m_fontSize: 10.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9564,7 +9563,7 @@ RectTransform:
   m_Children:
   - {fileID: 612148373}
   m_Father: {fileID: 2061883155}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.17280002, y: 0.22548446}
   m_AnchorMax: {x: 0.32581112, y: 0.28953388}
@@ -9673,6 +9672,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 737758713}
+  - {fileID: 1873314536}
   - {fileID: 691602076}
   m_Father: {fileID: 2061883155}
   m_RootOrder: 1
@@ -11019,7 +11019,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 9.85
+  m_fontSize: 9.8
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -11835,7 +11835,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12.2
+  m_fontSize: 12.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -12066,13 +12066,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 737758713}
-  m_RootOrder: 2
+  m_Father: {fileID: 1507090481}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.0017361111}
   m_AnchorMax: {x: 1, y: 0.99825}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -64.39679}
+  m_SizeDelta: {x: -181, y: -461.2614}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1873314537
 MonoBehaviour:
@@ -12261,7 +12261,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b500f51d7f7ff9b448599d58f9488736, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 846cd8468cec61f46bf957ddfa3eae56, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -12981,8 +12981,8 @@ RectTransform:
   - {fileID: 1542369352}
   - {fileID: 827932096}
   - {fileID: 653441426}
-  - {fileID: 66742543}
   - {fileID: 1476882471}
+  - {fileID: 66742543}
   - {fileID: 435553492}
   - {fileID: 1013868179}
   - {fileID: 1990836618}

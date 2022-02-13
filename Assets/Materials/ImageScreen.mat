@@ -104,7 +104,7 @@ Material:
     - _DistortAmount: 0
     - _DistortTexXSpeed: 0
     - _DistortTexYSpeed: 0
-    - _EditorDrawers: 7
+    - _EditorDrawers: 6
     - _FadeAmount: 0.15
     - _FadeBurnGlow: 1
     - _FadeBurnTransition: 0.39
@@ -173,7 +173,7 @@ Material:
     - _OverlayBlend: 1
     - _OverlayGlow: 1
     - _PinchUvAmount: 0
-    - _PixelateSize: 230
+    - _PixelateSize: 160
     - _PosterizeGamma: 2.4
     - _PosterizeNumColors: 47.55
     - _PosterizeOutline: 1
