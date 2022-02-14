@@ -12,46 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ca8c7a0b49a944ebdc163c51b49582, type: 3}
   m_Name: ThePortraits
   m_EditorClassIdentifier: 
-  CaseName: Default Name
+  CaseName: The Portraits
   paintings:
+  - {fileID: 21300000, guid: e5cb22d6af4693342b20c858e98a743b, type: 3}
   - {fileID: 21300000, guid: eee1532761664d2439ce7abd94c50f62, type: 3}
-  - {fileID: 21300000, guid: 75c6c075629e8bb408641fa9e9f6276d, type: 3}
+  - {fileID: 21300000, guid: 36e4cf3163239d346a8c521c377b9df2, type: 3}
   - {fileID: 21300000, guid: 846cd8468cec61f46bf957ddfa3eae56, type: 3}
   - {fileID: 21300000, guid: 430890f72602e0b4da9e7ad2ecf126b2, type: 3}
+  - {fileID: 21300000, guid: 75c6c075629e8bb408641fa9e9f6276d, type: 3}
   - {fileID: 21300000, guid: 067fb573e4631da4dac7d62380970ac4, type: 3}
   - {fileID: 21300000, guid: e6d076758169fd54c913cb61a71c133f, type: 3}
-  - {fileID: 21300000, guid: e5cb22d6af4693342b20c858e98a743b, type: 3}
-  - {fileID: 21300000, guid: 36e4cf3163239d346a8c521c377b9df2, type: 3}
   spriteClues:
-  - {fileID: 21300000, guid: 9ce44e57f766a914f8e00017cf17cda7, type: 3}
-  - {fileID: 21300000, guid: 5343f18019e9cdb469d8966791ecc722, type: 3}
-  - {fileID: 21300000, guid: d4222e58c3ab5524f81ea8574975da19, type: 3}
   - {fileID: 21300000, guid: 018ebe0ddb9251e49a4f6eeed282f8cd, type: 3}
+  - {fileID: 21300000, guid: 5343f18019e9cdb469d8966791ecc722, type: 3}
+  - {fileID: 21300000, guid: 9ce44e57f766a914f8e00017cf17cda7, type: 3}
+  - {fileID: 21300000, guid: d4222e58c3ab5524f81ea8574975da19, type: 3}
   textClues:
-  - No musical instruments - too fancy
-  - I am glad they aren't looking at me
-  - The background must be rather dark
-  - Make sure that the eyes look tired
+  - 'Make sure that the eyes look tired            '
+  - 'The background must be rather dark            '
+  - 'I am glad they aren''t looking at me           '
+  - 'No musical instruments - too fancy            '
   audioClues:
-  - {fileID: 11400000, guid: 64a07e8890a16144a853c239c00c65b5, type: 2}
-  - {fileID: 11400000, guid: 62a396a3ddb78db4a9fb1acad1659c68, type: 2}
   - {fileID: 11400000, guid: 92105bca731a07740bb948d7024be1f1, type: 2}
+  - {fileID: 11400000, guid: 62a396a3ddb78db4a9fb1acad1659c68, type: 2}
+  - {fileID: 11400000, guid: 64a07e8890a16144a853c239c00c65b5, type: 2}
   Paintings_Shuffled:
+  - {fileID: 21300000, guid: e5cb22d6af4693342b20c858e98a743b, type: 3}
   - {fileID: 21300000, guid: eee1532761664d2439ce7abd94c50f62, type: 3}
-  - {fileID: 21300000, guid: 75c6c075629e8bb408641fa9e9f6276d, type: 3}
+  - {fileID: 21300000, guid: 36e4cf3163239d346a8c521c377b9df2, type: 3}
   - {fileID: 21300000, guid: 846cd8468cec61f46bf957ddfa3eae56, type: 3}
   - {fileID: 21300000, guid: 430890f72602e0b4da9e7ad2ecf126b2, type: 3}
+  - {fileID: 21300000, guid: 75c6c075629e8bb408641fa9e9f6276d, type: 3}
   - {fileID: 21300000, guid: 067fb573e4631da4dac7d62380970ac4, type: 3}
   - {fileID: 21300000, guid: e6d076758169fd54c913cb61a71c133f, type: 3}
-  - {fileID: 21300000, guid: e5cb22d6af4693342b20c858e98a743b, type: 3}
-  - {fileID: 21300000, guid: 36e4cf3163239d346a8c521c377b9df2, type: 3}
   AudioClues_Shuffled:
-  - {fileID: 11400000, guid: 64a07e8890a16144a853c239c00c65b5, type: 2}
-  - {fileID: 11400000, guid: 62a396a3ddb78db4a9fb1acad1659c68, type: 2}
   - {fileID: 11400000, guid: 92105bca731a07740bb948d7024be1f1, type: 2}
-  TextClues_Shuffled: []
+  - {fileID: 11400000, guid: 62a396a3ddb78db4a9fb1acad1659c68, type: 2}
+  - {fileID: 11400000, guid: 64a07e8890a16144a853c239c00c65b5, type: 2}
+  TextClues_Shuffled:
+  - 'Make sure that the eyes look tired            '
+  - 'The background must be rather dark            '
+  - 'I am glad they aren''t looking at me           '
+  - 'No musical instruments - too fancy            '
   SpriteClues_Shuffled:
-  - {fileID: 21300000, guid: 9ce44e57f766a914f8e00017cf17cda7, type: 3}
-  - {fileID: 21300000, guid: 5343f18019e9cdb469d8966791ecc722, type: 3}
-  - {fileID: 21300000, guid: d4222e58c3ab5524f81ea8574975da19, type: 3}
   - {fileID: 21300000, guid: 018ebe0ddb9251e49a4f6eeed282f8cd, type: 3}
+  - {fileID: 21300000, guid: 5343f18019e9cdb469d8966791ecc722, type: 3}
+  - {fileID: 21300000, guid: 9ce44e57f766a914f8e00017cf17cda7, type: 3}
+  - {fileID: 21300000, guid: d4222e58c3ab5524f81ea8574975da19, type: 3}

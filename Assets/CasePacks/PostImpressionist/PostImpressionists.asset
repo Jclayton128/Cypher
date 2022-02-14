@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ca8c7a0b49a944ebdc163c51b49582, type: 3}
+  m_Name: PostImpressionists
+  m_EditorClassIdentifier: 
+  CaseName: The Post-Impressionists
+  paintings:
+  - {fileID: 21300000, guid: 064376bff00f85d4ca964e906c16d59c, type: 3}
+  - {fileID: 21300000, guid: 4a7af21b819ec9b4f846b612609d19c4, type: 3}
+  - {fileID: 21300000, guid: 18456b34dbd061c478bdc44761793e6a, type: 3}
+  - {fileID: 21300000, guid: ee14988fb4ddb4d43b0e954d21d38ff0, type: 3}
+  - {fileID: 21300000, guid: 4ed8b3971fec10d4eb1eb23e2318512f, type: 3}
+  - {fileID: 21300000, guid: 68f2fec43e5d27e40ab74ec49fabdb06, type: 3}
+  - {fileID: 21300000, guid: 1fa2f3b65c14be645b21918fe881e63a, type: 3}
+  - {fileID: 21300000, guid: 7be8956a554507c439012f5337b47d43, type: 3}
+  spriteClues:
+  - {fileID: 21300000, guid: f77b8425a3af4ee49b83ae58c35d4847, type: 3}
+  - {fileID: 21300000, guid: 9389d431a07cde14f9f1aaaaa898f7fd, type: 3}
+  - {fileID: 21300000, guid: deffd2b81ce0ef14b9be568d2dcbf308, type: 3}
+  - {fileID: 21300000, guid: 27b68232ec472484db9483bb33bcf788, type: 3}
+  textClues:
+  - I wonder how old those trees must be
+  - The sky seems a bit peculiar
+  - I cannot tell if that is supposed to be water
+  - No animals to paint this time
+  audioClues:
+  - {fileID: 11400000, guid: 3e9dd8a26e2dbb1499b04061c8389bbd, type: 2}
+  - {fileID: 11400000, guid: d758a1adfc8808b48bbf402f879e0051, type: 2}
+  - {fileID: 11400000, guid: 88d6afd56df32924ab51967a66077955, type: 2}
+  Paintings_Shuffled: []
+  AudioClues_Shuffled: []
+  TextClues_Shuffled: []
+  SpriteClues_Shuffled: []

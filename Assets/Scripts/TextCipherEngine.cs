@@ -19,9 +19,13 @@ public class TextCipherEngine : CipherEngine
     //state
     string plainText;
     string cypherText;
-    [SerializeField] bool[,] suppressions;
-    [SerializeField] int[,] encryptions;
-    [SerializeField] int[,] scrambles;
+    bool[,] suppressions;
+    int[,] encryptions;
+    int[,] scrambles;
+
+    Dictionary<TextPack, bool[,]> storedSuppressions = new Dictionary<TextPack, bool[,]>();
+    Dictionary<TextPack, int[,]> storedEncryptions = new Dictionary<TextPack, int[,]>();
+    Dictionary<TextPack, int[,]> storedScrambles = new Dictionary<TextPack, int[,]>();
 
     #region Preparation
     protected override void Start()
@@ -40,8 +44,22 @@ public class TextCipherEngine : CipherEngine
         targetVal_1 = file.TargetValues[1];
         targetVal_2 = file.TargetValues[2];
 
-        InitializeParameterizedSettings();
-        GenerateParameterizedSettings();
+        //These two steps need to happen once per string/text clue, not every time they are loaded
+
+        if (!storedEncryptions.ContainsKey(file))
+        {
+            InitializeParameterizedSettings();
+            GenerateParameterizedSettings();
+            storedEncryptions.Add(file, encryptions);
+            storedSuppressions.Add(file, suppressions);
+            storedScrambles.Add(file, scrambles);
+        }
+        else
+        {
+            suppressions = storedSuppressions[file];
+            encryptions = storedEncryptions[file];
+            scrambles = storedScrambles[file];
+        }
 
         isReadyToObfuscate = true;
 
@@ -51,6 +69,7 @@ public class TextCipherEngine : CipherEngine
     private void CreateLetterPool()
     {
         letterPool = new char[30];
+        //letterPool = new char[26];
         for (int i = 0; i < 26; i++)
         {
             letterPool[i] = Convert.ToChar('a' + i);
@@ -86,7 +105,7 @@ public class TextCipherEngine : CipherEngine
         //    Debug.Log($"slider value {1}, index {k} is {suppressions[0, k]}");
         //}
 
-        Obfuscate();
+        //Obfuscate();
     }
 
     private bool ReturnWeightedBoolean(float currentValue, float targetValue)
@@ -124,16 +143,16 @@ public class TextCipherEngine : CipherEngine
     {
         if (!isReadyToObfuscate)
         {
-            Debug.Log("Not ready to obfuscate");
+            //Debug.Log("Not ready to obfuscate");
             return;
         }
         char[] cypherChars = plainText.ToCharArray();
-
+        
+        cypherChars = ApplySuppression(cypherChars, im.SliderValue_0);
         cypherChars = ApplyEncryption(cypherChars, im.SliderValue_1);
         cypherChars = ApplyScrambling(cypherChars, im.SliderValue_2);
-        cypherChars = ApplySuppression(cypherChars, im.SliderValue_0);
 
-        cypherChars = Despace(cypherChars);
+        //cypherChars = Despace(cypherChars);
         cypherText = AssembleCypherText(cypherChars);
 
         im.UpdateDisplay(cypherText);
@@ -141,27 +160,27 @@ public class TextCipherEngine : CipherEngine
 
     #region Helpers
 
-    private char[] ApplyEncryption(char[] inputChars, float value)
+    private char[] ApplyEncryption(char[] inputChars, int value)
     {
         char[] cypherChars = inputChars;
         for (int i = 0; i < inputChars.Length; i++)
         {
             if (Char.IsLetter(cypherChars[i]))
             {
-                cypherChars[i] = Convert.ToChar(inputChars[i] + encryptions[im.SliderValue_1, i]);
+                cypherChars[i] = Convert.ToChar(inputChars[i] + encryptions[value, i]);
                 // Add in a "clamp" that keeps the new characters as something legible.
             }
-            else
-            {
-                if (encryptions[im.SliderValue_1, i] == 0)
-                {
-                    cypherChars[i] = inputChars[i];
-                }
-                else
-                {
-                    cypherChars[i] = Convert.ToChar(GetRandomChar() + encryptions[im.SliderValue_1, i]);
-                }                
-            }
+            //else
+            //{
+            //    if (encryptions[im.SliderValue_1, i] == 0)
+            //    {
+            //        cypherChars[i] = inputChars[i];
+            //    }
+            //    else
+            //    {
+            //        cypherChars[i] = Convert.ToChar(GetRandomChar() + encryptions[im.SliderValue_1, i]);
+            //    }                
+            //}
         }
 
         return cypherChars;
@@ -173,7 +192,7 @@ public class TextCipherEngine : CipherEngine
         char[] newCypherChars = inputChars;
         for (int i = 0; i < inputChars.Length; i++)
         {
-            if (suppressions[im.SliderValue_0, i] == false)  //
+            if (suppressions[(int)value, i] == false)  //
             {
                 if (Char.IsLetter(inputChars[i]) == true)
                 {
@@ -181,7 +200,16 @@ public class TextCipherEngine : CipherEngine
                 }
                 else
                 {
-                    newCypherChars[i] = GetRandomChar();
+                    //if (i > 0)
+                    //{
+                    //    newCypherChars[i] = newCypherChars[i - 1];
+                    //}
+                    //else
+                    //{
+                    //    newCypherChars[i] = 'a';
+                    //}
+
+                    //newCypherChars[i] = GetRandomChar();
                 }
             }
             else
@@ -204,7 +232,7 @@ public class TextCipherEngine : CipherEngine
         char[] newCypherChars = inputChars;
         for (int i = 0; i < inputChars.Length; i++)
         {
-            int movement = scrambles[im.SliderValue_2, i];
+            int movement = scrambles[(int)value, i];
             if ( movement == 0)
             {
                 //do no scrambling 

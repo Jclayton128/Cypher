@@ -169,6 +169,7 @@ public class InterfaceManager : MonoBehaviour
     public void HandleNextPressed()
     {
         int[] values = new int[3] { SliderValue_0, SliderValue_1, SliderValue_2 };
+        //Debug.Log($"next, saving sliders as {SliderValue_0}, {SliderValue_1}, {SliderValue_2}");
         fm.ReceiveUpdatedSliderValues(CurrentMode, values);
         fm.StepToNextFile(CurrentMode);
     }
@@ -176,6 +177,7 @@ public class InterfaceManager : MonoBehaviour
     public void HandleBackPressed()
     {
         int[] values = new int[3] { SliderValue_0, SliderValue_1, SliderValue_2 };
+        //Debug.Log($"previous, saving sliders as {SliderValue_0}, {SliderValue_1}, {SliderValue_2}");
         fm.ReceiveUpdatedSliderValues(CurrentMode, values);
         fm.StepBackFile(CurrentMode);
     }

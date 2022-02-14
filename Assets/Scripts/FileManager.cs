@@ -10,7 +10,7 @@ public class FileManager : MonoBehaviour
     TextCipherEngine textCE;
     ImageCipherEngine imageCE;
     AudioCipherEngine audioCE;
-    [SerializeField] CaseFile caseFile = null;
+
 
     string[] textSupply = null;
     Sprite[] spriteSupply = null;
@@ -23,10 +23,11 @@ public class FileManager : MonoBehaviour
     char underscore = ' ';
 
     //state
-    int currentText;
-    int currentSprite;
-    int currentAudio;
-    int currentPainting;
+    CaseFile currentCaseFile = null;
+    [SerializeField] int currentText;
+    [SerializeField] int currentSprite;
+    [SerializeField] int currentAudio;
+    [SerializeField] int currentPainting;
     List<int[]> targetValues_text;
     List<int[]> targetValues_sprites;
     List<int[]> targetValues_audio;
@@ -42,7 +43,7 @@ public class FileManager : MonoBehaviour
         imageCE = FindObjectOfType<ImageCipherEngine>();
         audioCE = FindObjectOfType<AudioCipherEngine>();
         uic = FindObjectOfType<UI_Controller>();
-        InitializeGame();
+        //InitializeGame();
     }
 
     public void InitializeGame()
@@ -68,11 +69,11 @@ public class FileManager : MonoBehaviour
 
     private void LoadCaseFile()
     {
-        caseFile.PrepareCase();
-        audioSupply = caseFile.AudioClues_Shuffled;
-        textSupply = caseFile.TextClues_Shuffled;
-        spriteSupply = caseFile.SpriteClues_Shuffled;
-        paintings = caseFile.Paintings_Shuffled;
+        currentCaseFile.PrepareCase();
+        audioSupply = currentCaseFile.AudioClues_Shuffled;
+        textSupply = currentCaseFile.TextClues_Shuffled;
+        spriteSupply = currentCaseFile.SpriteClues_Shuffled;
+        paintings = currentCaseFile.Paintings_Shuffled;
 
     }
 
@@ -202,6 +203,13 @@ public class FileManager : MonoBehaviour
 
 
     #region Public Methods
+    
+    public void SetNewCaseFile(CaseFile newCase)
+    {
+        currentCaseFile = newCase;
+        InitializeGame();
+    }
+
 
     public void HandleGotoNextPainting()
     {

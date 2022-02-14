@@ -53,5 +53,10 @@ public class CaseFile : ScriptableObject
         }
     }
 
+    public string GetCaseName()
+    {
+        return CaseName;
+    }
+
 
 }
