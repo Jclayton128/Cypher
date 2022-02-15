@@ -12,6 +12,7 @@ public class CaseFile : ScriptableObject
     [SerializeField] Sprite[] spriteClues = null;
     [SerializeField] string[] textClues = null;
     [SerializeField] AudioClue[] audioClues = null;
+    [SerializeField] public string[] AudioClueTranscripts = null;
 
     public Sprite[] Paintings_Shuffled;
     public AudioClue[] AudioClues_Shuffled;

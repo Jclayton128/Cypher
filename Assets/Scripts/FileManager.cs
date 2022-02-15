@@ -24,10 +24,10 @@ public class FileManager : MonoBehaviour
 
     //state
     CaseFile currentCaseFile = null;
-    [SerializeField] int currentText;
-    [SerializeField] int currentSprite;
-    [SerializeField] int currentAudio;
-    [SerializeField] int currentPainting;
+    int currentText;
+    int currentSprite;
+    int currentAudio;
+    int currentPainting;
     List<int[]> targetValues_text;
     List<int[]> targetValues_sprites;
     List<int[]> targetValues_audio;
@@ -78,7 +78,7 @@ public class FileManager : MonoBehaviour
         {
             paintings.Add(painting);
         }
-
+        PushPaintingIndexToDisplay();
     }
 
 

@@ -10,7 +10,7 @@ public class CaseManager : MonoBehaviour
 
     //state
     int activeCaseIndex = 0;
-    bool wasLastCaseSuccess = false;
+    public bool WasLastCaseSuccess { get; private set; } = false;
 
     private void Start()
     {
@@ -30,12 +30,12 @@ public class CaseManager : MonoBehaviour
         {
             Debug.Log($"pbs: {paintingBeingShown}, forgery: {caseFiles[activeCaseIndex].GetForgery()}");
             Debug.Log("you are right!");
-            wasLastCaseSuccess = true;
+            WasLastCaseSuccess = true;
         }
         else
         {
             Debug.Log("You are wrong :(");
-            wasLastCaseSuccess = false;
+            WasLastCaseSuccess = false;
         }
         uic.SetContext(UI_Controller.Context.Finish);
     }
@@ -48,5 +48,10 @@ public class CaseManager : MonoBehaviour
             names[i] = caseFiles[i].GetCaseName();
         }
         return names;
+    }
+
+    public CaseFile GetCaseFile()
+    {
+        return caseFiles[activeCaseIndex];
     }
 }

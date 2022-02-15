@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4c4fe83c87da841b30050f8f438fa2, type: 3}
+  m_Name: AudioClue2
+  m_EditorClassIdentifier: 
+  simoClips:
+  - {fileID: 8300000, guid: 325bc147314e6d14492512e535921549, type: 3}
+  - {fileID: 8300000, guid: a9014d9110c70284f97fea3bd6f8a85d, type: 3}
+  - {fileID: 8300000, guid: eca7164e82d15f046a00aae068a07ecd, type: 3}
+  - {fileID: 8300000, guid: 19f9bb9c63da1aa47b1bbbf435ae6c07, type: 3}
+  - {fileID: 8300000, guid: dd78877a220f8b6488d2f5b85d597d11, type: 3}
+  Clips_Shuffled: []

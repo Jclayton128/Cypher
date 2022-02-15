@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ca8c7a0b49a944ebdc163c51b49582, type: 3}
+  m_Name: StillLifes
+  m_EditorClassIdentifier: 
+  CaseName: The Still-lifes
+  paintings:
+  - {fileID: 21300000, guid: 041539057c5f02a4c8dc922e951f56a8, type: 3}
+  - {fileID: 21300000, guid: 915a9dde563e41d44ba4fd15fd0274ee, type: 3}
+  - {fileID: 21300000, guid: f44bf1a05c7ed9d45a056a72f38376b0, type: 3}
+  - {fileID: 21300000, guid: 750f0cfd606e50b40ad6f97e3ada8f87, type: 3}
+  - {fileID: 21300000, guid: 4b1677bd8f3a8d1448d677a986bb3f29, type: 3}
+  - {fileID: 21300000, guid: 4fcd608421fbe044093d70152d297975, type: 3}
+  - {fileID: 21300000, guid: 71ce38ac99a9ba047a62d143a7888566, type: 3}
+  - {fileID: 21300000, guid: eb5dc794a72fba24cbbdfe4085486493, type: 3}
+  spriteClues:
+  - {fileID: 21300000, guid: 173883b7704cc5649be9dd5222983ef0, type: 3}
+  - {fileID: 21300000, guid: d43eb123cf982aa488f80077fb25a04b, type: 3}
+  - {fileID: 21300000, guid: 1e46d0603c176d04d8df1c1f3aa9c2a0, type: 3}
+  - {fileID: 21300000, guid: db696583267966c4bb17739f8a19d77b, type: 3}
+  textClues:
+  - This scene is making me hungry
+  - The tablecloth would be hard to keep clean
+  - At least some of the food appears cooked
+  - I will need to keep working on the metal
+  audioClues:
+  - {fileID: 11400000, guid: 5c55aa3dd5bffad4491ed8eddfcaeb57, type: 2}
+  - {fileID: 11400000, guid: 80b03903f7b4a4140862822790eaa22d, type: 2}
+  - {fileID: 11400000, guid: cf8f7a8ffbb2b6d499710e622d4d0e69, type: 2}
+  AudioClueTranscripts:
+  - '"I think it must be a white wine in the glass"'
+  - '"If I have to paint any more fruit I wil scream"'
+  - '"I could eat that breadroll right now"'
+  Paintings_Shuffled:
+  - {fileID: 21300000, guid: eb5dc794a72fba24cbbdfe4085486493, type: 3}
+  - {fileID: 21300000, guid: 750f0cfd606e50b40ad6f97e3ada8f87, type: 3}
+  - {fileID: 21300000, guid: 4b1677bd8f3a8d1448d677a986bb3f29, type: 3}
+  - {fileID: 21300000, guid: 041539057c5f02a4c8dc922e951f56a8, type: 3}
+  - {fileID: 21300000, guid: 4fcd608421fbe044093d70152d297975, type: 3}
+  - {fileID: 21300000, guid: f44bf1a05c7ed9d45a056a72f38376b0, type: 3}
+  - {fileID: 21300000, guid: 915a9dde563e41d44ba4fd15fd0274ee, type: 3}
+  - {fileID: 21300000, guid: 71ce38ac99a9ba047a62d143a7888566, type: 3}
+  AudioClues_Shuffled:
+  - {fileID: 11400000, guid: cf8f7a8ffbb2b6d499710e622d4d0e69, type: 2}
+  - {fileID: 11400000, guid: 80b03903f7b4a4140862822790eaa22d, type: 2}
+  - {fileID: 11400000, guid: 5c55aa3dd5bffad4491ed8eddfcaeb57, type: 2}
+  TextClues_Shuffled:
+  - 'This scene is making me hungry                '
+  - 'The tablecloth would be hard to keep clean    '
+  - 'At least some of the food appears cooked      '
+  - 'I will need to keep working on the metal      '
+  SpriteClues_Shuffled:
+  - {fileID: 21300000, guid: d43eb123cf982aa488f80077fb25a04b, type: 3}
+  - {fileID: 21300000, guid: 173883b7704cc5649be9dd5222983ef0, type: 3}
+  - {fileID: 21300000, guid: db696583267966c4bb17739f8a19d77b, type: 3}
+  - {fileID: 21300000, guid: 1e46d0603c176d04d8df1c1f3aa9c2a0, type: 3}

@@ -37,15 +37,15 @@ public class UI_Controller : MonoBehaviour
         switch (newContext)
         {
             case Context.Start:
-                startPanel.ShowHideElements(true);
+                startPanel.Activate();
                 return;
 
             case Context.CoreGame:
-                coreGamePanel.ShowHideElements(true);
+                coreGamePanel.Activate();
                 return;
 
             case Context.Finish:
-                finalPanel.ShowHideElements(true);
+                finalPanel.Activate();
                 return;
         }
 

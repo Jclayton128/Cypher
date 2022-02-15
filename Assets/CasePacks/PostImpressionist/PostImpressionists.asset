@@ -36,6 +36,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d758a1adfc8808b48bbf402f879e0051, type: 2}
   - {fileID: 11400000, guid: 3e9dd8a26e2dbb1499b04061c8389bbd, type: 2}
   - {fileID: 11400000, guid: 88d6afd56df32924ab51967a66077955, type: 2}
+  AudioClueTranscripts:
+  - '"I suppose the sky doesn''t always need to be blue"'
+  - '"I quite enjoy painting people like this"'
+  - '"The short strokes - this style is so intriguing"'
   Paintings_Shuffled:
   - {fileID: 21300000, guid: 1fa2f3b65c14be645b21918fe881e63a, type: 3}
   - {fileID: 21300000, guid: 4ed8b3971fec10d4eb1eb23e2318512f, type: 3}

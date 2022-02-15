@@ -31,4 +31,9 @@ public class UI_Panel : MonoBehaviour
             elem.SetActive(shouldShow);
         }
     }
+
+    public virtual void Activate()
+    {
+        ShowHideElements(true);
+    }
 }
