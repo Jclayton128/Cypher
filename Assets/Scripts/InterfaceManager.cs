@@ -13,6 +13,7 @@ public class InterfaceManager : MonoBehaviour
     ImageCipherEngine imageCE;
     AudioCipherEngine audioCE;
     FileManager fm;
+    CaseManager cm;
     [SerializeField] Image ImageScreen = null;
     [SerializeField] Image PaintingScreen = null;
     [SerializeField] Slider[] sliders = null;
@@ -70,6 +71,7 @@ public class InterfaceManager : MonoBehaviour
         textCE = FindObjectOfType<TextCipherEngine>();
         audioCE = FindObjectOfType<AudioCipherEngine>();
         fm = FindObjectOfType<FileManager>();
+        cm = FindObjectOfType<CaseManager>();
     }
 
     protected void SetupSliders()
@@ -207,6 +209,17 @@ public class InterfaceManager : MonoBehaviour
         audioCE.AdjustVolume(volumeSlider.value);
     }
 
+    public void HandleForgeryGuess()
+    {
+        cm.HandleGuessOnForgery(PaintingScreen.sprite);
+    }
+
+    public void HandleIsRealPress()
+    {
+        fm.RemoveCurrentPainting();
+        //TODO audio of painting being removed
+    }
+
     #endregion
 
     #region Public UI Updaters
@@ -256,7 +269,7 @@ public class InterfaceManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Cannot send text while in {CurrentMode} mode");
+            //Debug.Log($"Cannot send text while in {CurrentMode} mode");
             return false;
         }
     }
@@ -265,7 +278,7 @@ public class InterfaceManager : MonoBehaviour
     {
         if (CurrentMode != Mode.Sprite)
         {
-            Debug.Log($"Cannot send images while in {CurrentMode} mode");
+            //Debug.Log($"Cannot send images while in {CurrentMode} mode");
             return false;
         }
         ImageScreen.sprite = sprite;

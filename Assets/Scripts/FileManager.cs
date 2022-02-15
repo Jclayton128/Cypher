@@ -15,7 +15,7 @@ public class FileManager : MonoBehaviour
     string[] textSupply = null;
     Sprite[] spriteSupply = null;
     AudioClue[] audioSupply = null;
-    Sprite[] paintings = null;
+    List<Sprite> paintings = new List<Sprite>();
    
 
     //settings
@@ -73,7 +73,11 @@ public class FileManager : MonoBehaviour
         audioSupply = currentCaseFile.AudioClues_Shuffled;
         textSupply = currentCaseFile.TextClues_Shuffled;
         spriteSupply = currentCaseFile.SpriteClues_Shuffled;
-        paintings = currentCaseFile.Paintings_Shuffled;
+        paintings.Clear();
+        foreach (var painting in currentCaseFile.Paintings_Shuffled)
+        {
+            paintings.Add(painting);
+        }
 
     }
 
@@ -181,7 +185,7 @@ public class FileManager : MonoBehaviour
 
     private void PushPaintingIndexToDisplay()
     {
-        im.UpdatePaintingIndexDisplay($"{currentPainting+1}/{paintings.Length}");
+        im.UpdatePaintingIndexDisplay($"{currentPainting+1}/{paintings.Count}");
     }
 
     private void PushCurrentText()
@@ -214,7 +218,7 @@ public class FileManager : MonoBehaviour
     public void HandleGotoNextPainting()
     {
         currentPainting++;
-        if (currentPainting >= paintings.Length)
+        if (currentPainting >= paintings.Count)
         {
             currentPainting = 0;
         }
@@ -228,7 +232,7 @@ public class FileManager : MonoBehaviour
         currentPainting--;
         if (currentPainting < 0)
         {
-            currentPainting = paintings.Length - 1;
+            currentPainting = paintings.Count - 1;
         }
         im.UpdatePainting(paintings[currentPainting]);
         PushPaintingIndexToDisplay();
@@ -349,6 +353,19 @@ public class FileManager : MonoBehaviour
             return;
         }
 
+    }
+
+    public void RemoveCurrentPainting()
+    {
+        paintings.RemoveAt(currentPainting);
+        currentPainting--;
+        if (currentPainting < 0)
+        {
+            currentPainting = paintings.Count - 1;
+        }
+        im.UpdatePainting(paintings[currentPainting]);
+        PushPaintingIndexToDisplay();
+        
     }
 
     #endregion

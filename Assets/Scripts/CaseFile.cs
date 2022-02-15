@@ -22,10 +22,10 @@ public class CaseFile : ScriptableObject
 
     public void PrepareCase()
     {
-        Paintings_Shuffled = paintings;
-        AudioClues_Shuffled = audioClues;
-        TextClues_Shuffled = textClues;
-        SpriteClues_Shuffled = spriteClues;
+        Paintings_Shuffled = (Sprite[])paintings.Clone();
+        AudioClues_Shuffled = (AudioClue[])audioClues.Clone();
+        TextClues_Shuffled = (string[])textClues.Clone();
+        SpriteClues_Shuffled = (Sprite[])spriteClues.Clone();
 
         Shuffle(Paintings_Shuffled);
         Shuffle(AudioClues_Shuffled);
@@ -56,6 +56,11 @@ public class CaseFile : ScriptableObject
     public string GetCaseName()
     {
         return CaseName;
+    }
+
+    public Sprite GetForgery()
+    {
+        return paintings[0];
     }
 
 
